@@ -1,0 +1,34 @@
+{
+  "name": "website-history-browser",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "WebExtension to browse your history per website",
+  "author": "maxlath",
+  "scripts": {
+    "auto-reload-extension": "web-ext run",
+    "build": "rollup -c",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "lint:extension": "web-ext lint",
+    "watch": "rollup -c -w"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^17.1.0",
+    "@rollup/plugin-node-resolve": "^11.2.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.3.1",
+    "eslint-plugin-svelte3": "^3.1.2",
+    "rollup": "^2.41.4",
+    "rollup-plugin-css-only": "^3.1.0",
+    "rollup-plugin-svelte": "^7.1.0",
+    "svelte": "^3.35.0",
+    "web-ext": "^6.0.0"
+  },
+  "webExt": {
+    "sourceDir": "extension"
+  },
+  "license": "GPL-3.0"
+}

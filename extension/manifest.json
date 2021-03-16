@@ -1,0 +1,34 @@
+{
+  "name": "website-history-browser",
+  "description": "Website History Browser",
+  "manifest_version": 2,
+  "version": "1.0",
+  "permissions": [
+    "bookmarks",
+    "history",
+    "storage",
+    "tabs"
+  ],
+  "background": {
+    "scripts": [ "background.js" ]
+  },
+  "icons": {
+    "16": "history.svg",
+    "32": "history.svg",
+    "48": "history.svg",
+    "96": "history.svg"
+  },
+  "browser_action": {
+    "default_icon": "history.svg",
+    "default_title": "Website History Browser",
+    "default_popup": "index.html"
+  },
+  "commands": {
+    "open-website-history-browser": {
+      "suggested_key": {
+        "default": "Ctrl+Alt+H"
+      },
+      "description": "Open website history browser"
+    }
+  }
+}
