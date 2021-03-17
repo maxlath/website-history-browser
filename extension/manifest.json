@@ -1,6 +1,6 @@
 {
   "name": "website-history-browser",
-  "description": "Website History Browser",
+  "description": "a WebExtension to browse your history per website",
   "manifest_version": 2,
   "version": "1.0",
   "permissions": [
