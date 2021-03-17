@@ -24,6 +24,9 @@
 </li>
 
 <style>
+  .period{
+    margin-top: 1em;
+  }
   ul, li{
     display: flex;
     flex-direction: column;
@@ -46,6 +49,7 @@
     color: white;
     background-color: #00b3ea55;
     transition: background-color 0.3s ease;
+    border-radius: 3px;
   }
   button:hover{
     background-color: #00b3ea;
@@ -88,5 +92,7 @@
     border-radius: 3px;
     padding: 0 0.2em;
     color: #222;
+    opacity: 0.9;
+    font-size: 0.8rem;
   }
 </style>

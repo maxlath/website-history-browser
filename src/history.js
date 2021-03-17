@@ -5,7 +5,7 @@ export async function getHistoryByPeriod ({ origin }) {
   let historyItems = await browser.history.search({
     text: origin,
     startTime: theBeginningOfTimes,
-    maxResults: 5000
+    maxResults: Number.MAX_SAFE_INTEGER
   })
 
   historyItems = historyItems.filter(item => item.url.startsWith(origin))
