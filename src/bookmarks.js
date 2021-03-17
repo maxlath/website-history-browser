@@ -5,16 +5,19 @@ export const getBookmarksPerUrl = async origin => {
     const { url } = bookmark
     bookmarksPerUrl[url] = bookmarksPerUrl[url] || []
     bookmarksPerUrl[url].push(bookmark)
-    bookmark.timeCapsuleData = getBookmarkTimeCapsuleData(bookmark.title)
+    bookmark.timeCapsule = getBookmarkTimeCapsule(bookmark.title)
   }
   return bookmarksPerUrl
 }
 
-const getBookmarkTimeCapsuleData = title => {
+const getBookmarkTimeCapsule = title => {
   if (!title.includes('/ᐒ/')) return
   const timeCapsuleStringData = title.split('/ᐒ/')[1].trim()
-  const [ , periodicty, nextOpenTime ] = timeCapsuleStringData.match(timeCapsuleStringDataPattern)
-  return { periodicty, nextOpenTime }
+  const match = timeCapsuleStringData.match(timeCapsuleStringDataPattern)
+  if (match) {
+    const [ , periodicity, nextOpenTime ] = match
+    return { periodicity, nextOpenTime }
+  }
 }
 
 const timeCapsuleStringDataPattern = /^(\d+[A-Z]) (.*)/

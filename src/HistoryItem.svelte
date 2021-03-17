@@ -1,5 +1,6 @@
 <script>
   import { daysAgo, daysAgoText, localDate } from './date'
+  import Star from './star.svelte'
   export let item, origin
 
   const getHighlightClass = visitCount => `highlight-${Math.trunc(Math.log10(visitCount))}`
@@ -14,7 +15,7 @@ total visits: ${item.visitCount}`
 <li class="history-item">
   <a href="{item.url}" title="{title}">
     <div class="info">
-      <span class="bookmarks">{#if item.bookmarks != null}⭐{/if}</span>
+      <span class="bookmarks"><Star bookmarks={item.bookmarks} /></span>
       <!-- TODO: display favicon once https://bugzilla.mozilla.org/show_bug.cgi?id=1315616 is solved -->
       <h3 class="title">{item.shortTitle}</h3>
       <p class="url">{item.url.replace(origin, '')}</p>
@@ -77,9 +78,6 @@ total visits: ${item.visitCount}`
   }
   h3{
     color: #222;
-  }
-  .bookmarks{
-    width: 1em;
   }
   .last-visit-absolute-date{
     color: #444;
