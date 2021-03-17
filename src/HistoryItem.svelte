@@ -6,12 +6,15 @@
 
   const daysAgoCount = daysAgo(item.lastVisitTime)
   const daysAgoLabel = daysAgoCount > 2 ? `${daysAgoCount} days ago` : ''
+  const title = `${item.title}\n${item.url}
+last visit: ${daysAgoText(item.lastVisitTime)}, ${localDate(item.lastVisitTime)}
+total visits: ${item.visitCount}`
 </script>
 
 <li class="history-item">
-  <a href="{item.url}" title="{item.title} (total visits: {item.visitCount}, last visit: {daysAgoText(item.lastVisitTime)}, {new Date(item.lastVisitTime).toLocaleDateString()})">
+  <a href="{item.url}" title="{title}">
     <div class="info">
-      <!-- TODO: highlight bookmarked URLs -->
+      <span class="bookmarks">{#if item.bookmarks != null}⭐{/if}</span>
       <!-- TODO: display favicon once https://bugzilla.mozilla.org/show_bug.cgi?id=1315616 is solved -->
       <h3 class="title">{item.title}</h3>
       <p class="url">{item.url.replace(origin, '')}</p>
@@ -74,6 +77,9 @@
   }
   h3{
     color: #222;
+  }
+  .bookmarks{
+    width: 1em;
   }
   .last-visit-absolute-date{
     color: #444;
