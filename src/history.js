@@ -1,5 +1,6 @@
 import { daysAgoText, periodByLabel } from './date'
 import { reorderObject } from './utils'
+import { getBookmarksPerUrl } from './bookmarks'
 const theBeginningOfTimes = new Date(0)
 
 export async function getHistoryItems ({ origin }) {
@@ -58,17 +59,6 @@ const getHistoryItem = async origin => {
   return historyItems.filter(item => item.url.startsWith(origin))
 }
 
-const getBookmarksPerUrl = async origin => {
-  const bookmarksPerUrl = {}
-  const bookmarks = await browser.bookmarks.search(origin)
-  for (const bookmark of bookmarks) {
-    const { url } = bookmark
-    bookmarksPerUrl[url] = bookmarksPerUrl[url] || []
-    bookmarksPerUrl[url].push(bookmark)
-  }
-  return bookmarksPerUrl
-}
-
 const findGlobalTitle = items => {
   items = items.filter(item => item.title != null)
 
@@ -104,3 +94,5 @@ const getShortTitle = (itemTitle, globalTitle) => {
 
 const partSeparators = /\s*[-—\|]{1}\s*/g
 const endSeparators = /(\s*[-—\|]{1}\s*)*$/
+
+export const hasBookmarks = item => item.bookmarks != null

@@ -1,40 +1,33 @@
 <script>
-  import { getHistoryItems, spreadItemsByPeriod, findPeriodsToShow, filterByText } from './history'
+  import { getHistoryItems, spreadItemsByPeriod, findPeriodsToShow, filterByText, hasBookmarks } from './history'
   import { getCurrentTabUrl } from './tabs'
   import PeriodHistoryItems from './PeriodHistoryItems.svelte'
   import HistoryItem from './HistoryItem.svelte'
 
   export let url
 
-  let host, origin, allHistoryItems, historyItemsByPeriod, globalTitle, historyItemsSortedByVisits
-  let historyItems = [], shownPeriods = {}, sortMode = 'date'
+  let host, origin, historyItemsByPeriod, globalTitle, historyItemsSortedByVisits, textFilter
+  let allHistoryItems = [], historyItems = [], shownPeriods = {}, sortMode = 'date', bookmarksOnly = false
 
   const init = async () => {
     url = url || await getCurrentTabUrl()
     ;({ host, origin } = new URL(url))
     ;({ historyItems, globalTitle } = await getHistoryItems({ origin }))
     allHistoryItems = historyItems
-    showByDate()
   }
-
-  const showByDate = () => {
-    historyItemsByPeriod = spreadItemsByPeriod(historyItems)
-    shownPeriods = findPeriodsToShow(historyItemsByPeriod, 50)
-  }
-
   const waitingForInitialData = init()
 
-  const filter = event => {
-    historyItems = filterByText(allHistoryItems, event.target.value)
-    showByDate()
-  }
-
   $: {
-    if (sortMode === 'visits') {
+    historyItems = filterByText(allHistoryItems, textFilter)
+    if (bookmarksOnly) historyItems = historyItems.filter(hasBookmarks)
+
+    if (sortMode === 'date') {
+      historyItemsByPeriod = spreadItemsByPeriod(historyItems)
+      shownPeriods = findPeriodsToShow(historyItemsByPeriod, 50)
+    } else if (sortMode === 'visits') {
       historyItemsSortedByVisits = historyItems.sort((a, b) => b.visitCount - a.visitCount)
     }
   }
-
 </script>
 
 {#await waitingForInitialData}
@@ -49,14 +42,16 @@
     <label for="sort">Sort by:</label>
     <select
       name="sort"
-      id="sort"
       bind:value={sortMode}
       >
       <option value="date" selected>Date</option>
       <option value="visits" selected>Number of visits</option>
     </select>
 
-    <input type="text" placeholder="filter..." on:keyup={filter}>
+    <input type="text" placeholder="filter..." on:keyup={event => textFilter = event.target.value}>
+
+    <input name="bookmarks-only" type="checkbox" bind:checked={bookmarksOnly}>
+    <label for="bookmarks-only">bookmarks only</label>
 
     <p class="shown-rate">{historyItems.length} / {allHistoryItems.length}</p>
   </div>
