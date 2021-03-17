@@ -1,24 +1,31 @@
 import { daysAgoText } from './utils'
 const theBeginningOfTimes = new Date(0)
 
-export async function getHistoryByPeriod ({ origin }) {
+export async function getHistoryItems ({ origin }) {
   const [ historyItems, bookmarksPerUrl ] = await Promise.all([
     getHistoryItem(origin),
     getBookmarksPerUrl(origin),
   ])
 
   const globalTitle = findGlobalTitle(historyItems)
-  setShortTitle(historyItems, globalTitle)
 
-  const historyItemsByPeriod = {}
-  for (const historyItem of historyItems) {
-    const period = daysAgoText(historyItem.lastVisitTime)
-    historyItemsByPeriod[period] = historyItemsByPeriod[period] || []
-    historyItemsByPeriod[period].push(historyItem)
-    historyItem.bookmarks = bookmarksPerUrl[historyItem.url]
+  for (const item of historyItems) {
+    item.shortTitle = getShortTitle(item.title, globalTitle)
+    item.bookmarks = bookmarksPerUrl[item.url]
   }
 
-  return { historyItemsByPeriod, globalTitle }
+  return { historyItems, globalTitle }
+}
+
+export function spreadItemsByPeriod (historyItems) {
+  const historyItemsByPeriod = {}
+  for (const historyItem of historyItems) {
+    const period = historyItem._period || daysAgoText(historyItem.lastVisitTime)
+    historyItem._period = period
+    historyItemsByPeriod[period] = historyItemsByPeriod[period] || []
+    historyItemsByPeriod[period].push(historyItem)
+  }
+  return historyItemsByPeriod
 }
 
 export function findPeriodsToShow (historyItemsByPeriod, limit) {
@@ -31,16 +38,12 @@ export function findPeriodsToShow (historyItemsByPeriod, limit) {
   return shownPeriod
 }
 
-export function filterByText (historyItemsByPeriod, text) {
-  if (!text || text === '') return historyItemsByPeriod
-  const filteredItemsByPeriod = {}
+export function filterByText (historyItems, text) {
+  if (!text || text === '') return historyItems
   const pattern = new RegExp(text, 'i')
-  const titleOrUrlMatch = item => pattern.test(item.title) || pattern.test(item.url)
-  for (const [ period, items ] of Object.entries(historyItemsByPeriod)) {
-    const filteredItems = items.filter(titleOrUrlMatch)
-    if (filteredItems.length > 0) filteredItemsByPeriod[period] = filteredItems
-  }
-  return filteredItemsByPeriod
+  return historyItems.filter(item => {
+    return pattern.test(item.title) || pattern.test(item.url)
+  })
 }
 
 const getHistoryItem = async origin => {
@@ -89,12 +92,11 @@ const findGlobalTitle = items => {
   return titleWithRecurrentParts.slice(firstRecurrentPartIndex)
 }
 
-const setShortTitle = (items, globalTitle) => {
-  items.forEach(item => {
-    item.shortTitle = item.title
-      .replace(globalTitle, '')
-      .replace(endSeparators, '')
-  })
+const getShortTitle = (itemTitle, globalTitle) => {
+  if (!globalTitle) return itemTitle
+  return itemTitle
+  .replace(globalTitle, '')
+  .replace(endSeparators, '')
 }
 
 const partSeparators = /\s*[-—\|]{1}\s*/g

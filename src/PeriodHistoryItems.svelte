@@ -24,9 +24,6 @@
 </li>
 
 <style>
-  .period{
-    margin-top: 1em;
-  }
   ul, li{
     display: flex;
     flex-direction: column;
@@ -37,7 +34,7 @@
   }
   button{
     padding: 0;
-    margin: 0.5em 0;
+    margin: 1em 0 0.2em 0;
     border: none;
     outline: none;
     cursor: pointer;
@@ -47,12 +44,12 @@
     justify-content: center;
     flex: 1;
     color: white;
-    background-color: #00b3ea55;
+    background-color: #175365ee;
     transition: background-color 0.3s ease;
     border-radius: 3px;
   }
   button:hover{
-    background-color: #00b3ea;
+    background-color: #175365;
     border-radius: 3px;
   }
   h2{

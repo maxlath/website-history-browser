@@ -1,50 +1,90 @@
 <script>
-  import { getHistoryByPeriod, findPeriodsToShow, filterByText } from './history'
+  import { getHistoryItems, spreadItemsByPeriod, findPeriodsToShow, filterByText } from './history'
   import { getCurrentTabUrl } from './tabs'
   import PeriodHistoryItems from './PeriodHistoryItems.svelte'
+  import HistoryItem from './HistoryItem.svelte'
 
   export let url
 
-  let host, origin, historyItemsByPeriod, allHistoryItemsByPeriod, shownPeriods = {}, globalTitle
+  let host, origin, allHistoryItems, historyItemsByPeriod, globalTitle, historyItemsSortedByVisits
+  let historyItems = [], shownPeriods = {}, sortMode = 'date'
 
   const init = async () => {
-    url = url || await getCurrentTabUrl();
+    url = url || await getCurrentTabUrl()
     ;({ host, origin } = new URL(url))
-    ;({ historyItemsByPeriod, globalTitle } = await getHistoryByPeriod({ origin }))
-    allHistoryItemsByPeriod = historyItemsByPeriod
+    ;({ historyItems, globalTitle } = await getHistoryItems({ origin }))
+    allHistoryItems = historyItems
+    showByDate()
+  }
+
+  const showByDate = () => {
+    historyItemsByPeriod = spreadItemsByPeriod(historyItems)
     shownPeriods = findPeriodsToShow(historyItemsByPeriod, 50)
   }
 
-  const historyPromise = init()
+  const waitingForInitialData = init()
 
   const filter = event => {
-    historyItemsByPeriod = filterByText(allHistoryItemsByPeriod, event.target.value)
-    shownPeriods = findPeriodsToShow(historyItemsByPeriod, 50)
+    historyItems = filterByText(allHistoryItems, event.target.value)
+    showByDate()
+  }
+
+  $: {
+    if (sortMode === 'visits') {
+      historyItemsSortedByVisits = historyItems.sort((a, b) => b.visitCount - a.visitCount)
+    }
   }
 
 </script>
 
-{#await historyPromise}
+{#await waitingForInitialData}
   <p class="loading">Loading history...</p>
 {:then}
   <h1>
     {#if globalTitle}{globalTitle} - {/if}
     <span class="host">{host}</span>
   </h1>
-  <input type="text" placeholder="filter..." on:keyup={filter}>
-  <ul class="history-items-by-period">
-    {#each Object.entries(historyItemsByPeriod) as [ period, periodHistoryItems ] (period)}
-      <PeriodHistoryItems
-        {period}
-        {periodHistoryItems}
-        {shownPeriods}
-        {origin}
-        on:toggle={() => shownPeriods[period] = !shownPeriods[period]}
-        />
-    {:else}
-      <p class="empty">nothing found</p>
-    {/each}
-  </ul>
+
+  <div class="controls">
+    <label for="sort">Sort by:</label>
+    <select
+      name="sort"
+      id="sort"
+      bind:value={sortMode}
+      >
+      <option value="date" selected>Date</option>
+      <option value="visits" selected>Number of visits</option>
+    </select>
+
+    <input type="text" placeholder="filter..." on:keyup={filter}>
+
+    <p class="shown-rate">{historyItems.length} / {allHistoryItems.length}</p>
+  </div>
+
+  {#if sortMode === 'date'}
+    <ul class="history-by-date">
+      {#each Object.entries(historyItemsByPeriod) as [ period, periodHistoryItems ] (period)}
+        <PeriodHistoryItems
+          {period}
+          {periodHistoryItems}
+          {shownPeriods}
+          {origin}
+          on:toggle={() => shownPeriods[period] = !shownPeriods[period]}
+          />
+      {:else}
+        <p class="empty">nothing found</p>
+      {/each}
+    </ul>
+  {:else if sortMode === 'visits'}
+    <ul class="history-by-visits">
+      {#each historyItemsSortedByVisits as item (item.id)}
+        <HistoryItem {item} {origin} />
+      {:else}
+        <p class="empty">nothing found</p>
+      {/each}
+    </ul>
+  {/if}
+
 {:catch error}
   <p>{error}</p>
 {/await}
@@ -72,11 +112,30 @@
     color: #aaa;
     text-align: center;
   }
+  .host{
+    color: white;
+  }
   .loading, .empty{
     text-align: center;
     padding: 1em;
   }
   .empty{
     font-style: italic;
+  }
+  .history-by-visits{
+    margin-top: 1em;
+  }
+  .controls{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  select, input[type="text"]{
+    margin: 0 0.5em;
+  }
+  .shown-rate{
+    margin-left: auto;
+    color: #bbb;
   }
 </style>

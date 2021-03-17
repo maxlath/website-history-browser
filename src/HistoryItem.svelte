@@ -35,7 +35,7 @@ total visits: ${item.visitCount}`
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    padding: 0.2em;
+    padding: 0.5em;
     margin: 0.1em 0;
     border-radius: 2px;
     text-decoration: none;
@@ -96,14 +96,14 @@ total visits: ${item.visitCount}`
       max-width: 50em;
       margin: 0 0.2em;
     }
+    .title:not(:empty) + .url{
+      margin-left: 0.5em;
+    }
     .info{
       display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: center;
-    }
-    .url{
-      margin-left: 0.5em;
     }
     .visit-count-wrapper{
       width: 2em;
@@ -113,7 +113,7 @@ total visits: ${item.visitCount}`
     }
   }
   /*Small screens*/
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 800px) {
     .last-visit-relative-date, .last-visit-absolute-date{
       display: none;
     }
