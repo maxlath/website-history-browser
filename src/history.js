@@ -1,4 +1,5 @@
-import { daysAgoText } from './utils'
+import { daysAgoText, periodByLabel } from './date'
+import { reorderObject } from './utils'
 const theBeginningOfTimes = new Date(0)
 
 export async function getHistoryItems ({ origin }) {
@@ -25,8 +26,10 @@ export function spreadItemsByPeriod (historyItems) {
     historyItemsByPeriod[period] = historyItemsByPeriod[period] || []
     historyItemsByPeriod[period].push(historyItem)
   }
-  return historyItemsByPeriod
+  return reorderObject(historyItemsByPeriod, byPeriodThreshold)
 }
+
+const byPeriodThreshold = (a, b) => periodByLabel[a].threshold - periodByLabel[b].threshold
 
 export function findPeriodsToShow (historyItemsByPeriod, limit) {
   let total = 0

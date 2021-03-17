@@ -1,5 +1,5 @@
 <script>
-  import { daysAgo, daysAgoText, localDate } from './utils'
+  import { daysAgo, daysAgoText, localDate } from './date'
   export let item, origin
 
   const getHighlightClass = visitCount => `highlight-${Math.trunc(Math.log10(visitCount))}`
