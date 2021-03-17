@@ -7,6 +7,9 @@ export async function getHistoryByPeriod ({ origin }) {
     getBookmarksPerUrl(origin),
   ])
 
+  const globalTitle = findGlobalTitle(historyItems)
+  setShortTitle(historyItems, globalTitle)
+
   const historyItemsByPeriod = {}
   for (const historyItem of historyItems) {
     const period = daysAgoText(historyItem.lastVisitTime)
@@ -15,7 +18,7 @@ export async function getHistoryByPeriod ({ origin }) {
     historyItem.bookmarks = bookmarksPerUrl[historyItem.url]
   }
 
-  return historyItemsByPeriod
+  return { historyItemsByPeriod, globalTitle }
 }
 
 export function findPeriodsToShow (historyItemsByPeriod, limit) {
@@ -59,3 +62,40 @@ const getBookmarksPerUrl = async origin => {
   }
   return bookmarksPerUrl
 }
+
+const findGlobalTitle = items => {
+  items = items.filter(item => item.title != null)
+
+  if (items.length < 5) return
+
+  const parts = {}
+  items.forEach(({ title }) => {
+    title.split(partSeparators).slice(1)
+    .forEach(part => {
+      parts[part] = parts[part] || 0
+      parts[part]++
+    })
+  })
+
+  const recurrentParts = Object.keys(parts)
+    .filter(part => parts[part] > 0.9 * items.length)
+
+  const { title: titleWithRecurrentParts } = items.find(item => {
+    return recurrentParts.every(part => item.title.includes(part))
+  })
+
+  const firstRecurrentPartIndex = Math.min(...recurrentParts.map(part => titleWithRecurrentParts.indexOf(part)))
+
+  return titleWithRecurrentParts.slice(firstRecurrentPartIndex)
+}
+
+const setShortTitle = (items, globalTitle) => {
+  items.forEach(item => {
+    item.shortTitle = item.title
+      .replace(globalTitle, '')
+      .replace(endSeparators, '')
+  })
+}
+
+const partSeparators = /\s*[-—\|]{1}\s*/g
+const endSeparators = /(\s*[-—\|]{1}\s*)*$/

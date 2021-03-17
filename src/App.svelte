@@ -5,12 +5,12 @@
 
   export let url
 
-  let host, origin, historyItemsByPeriod, allHistoryItemsByPeriod, shownPeriods = {}
+  let host, origin, historyItemsByPeriod, allHistoryItemsByPeriod, shownPeriods = {}, globalTitle
 
   const init = async () => {
     url = url || await getCurrentTabUrl();
-    ({ host, origin } = new URL(url))
-    historyItemsByPeriod = await getHistoryByPeriod({ origin })
+    ;({ host, origin } = new URL(url))
+    ;({ historyItemsByPeriod, globalTitle } = await getHistoryByPeriod({ origin }))
     allHistoryItemsByPeriod = historyItemsByPeriod
     shownPeriods = findPeriodsToShow(historyItemsByPeriod, 50)
   }
@@ -27,7 +27,10 @@
 {#await historyPromise}
   <p class="loading">Loading history...</p>
 {:then}
-  <h1>{host}</h1>
+  <h1>
+    {#if globalTitle}{globalTitle} - {/if}
+    <span class="host">{host}</span>
+  </h1>
   <input type="text" placeholder="filter..." on:keyup={filter}>
   <ul class="history-items-by-period">
     {#each Object.entries(historyItemsByPeriod) as [ period, periodHistoryItems ] (period)}

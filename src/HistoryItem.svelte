@@ -16,7 +16,7 @@ total visits: ${item.visitCount}`
     <div class="info">
       <span class="bookmarks">{#if item.bookmarks != null}⭐{/if}</span>
       <!-- TODO: display favicon once https://bugzilla.mozilla.org/show_bug.cgi?id=1315616 is solved -->
-      <h3 class="title">{item.title}</h3>
+      <h3 class="title">{item.shortTitle}</h3>
       <p class="url">{item.url.replace(origin, '')}</p>
     </div>
     {#if daysAgoLabel}
