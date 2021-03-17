@@ -1,11 +1,11 @@
-import { daysAgo, daysAgoText } from './utils'
+import { daysAgoText } from './utils'
 const theBeginningOfTimes = new Date(0)
 
 export async function getHistoryByPeriod ({ origin }) {
   let historyItems = await browser.history.search({
     text: origin,
     startTime: theBeginningOfTimes,
-    maxResults: Number.MAX_SAFE_INTEGER
+    maxResults: 5000
   })
 
   historyItems = historyItems.filter(item => item.url.startsWith(origin))
@@ -17,7 +17,15 @@ export async function getHistoryByPeriod ({ origin }) {
     historyItemsByPeriod[period].push(historyItem)
   }
 
-  console.log('historyItemsByPeriod', historyItemsByPeriod)
-
   return historyItemsByPeriod
+}
+
+export function findPeriodsToShow (historyItemsByPeriod, limit) {
+  let total = 0
+  const shownPeriod = {}
+  for (const period in historyItemsByPeriod) {
+    shownPeriod[period] = total < limit
+    total += historyItemsByPeriod[period].length
+  }
+  return shownPeriod
 }
