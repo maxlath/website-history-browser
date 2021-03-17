@@ -24,11 +24,17 @@
     "default_popup": "index.html"
   },
   "commands": {
-    "open-website-history-browser": {
+    "open-website-history-browser-popup": {
       "suggested_key": {
         "default": "Ctrl+Alt+H"
       },
-      "description": "Open website history browser"
+      "description": "Open website history browser popup"
+    },
+    "open-website-history-browser-tab": {
+      "suggested_key": {
+        "default": "Ctrl+Alt+J"
+      },
+      "description": "Open website history browser tab"
     }
   }
 }

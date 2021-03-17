@@ -1,4 +1,4 @@
 node_modules
 extension/bundle.css
-extension/main.js
+extension/*.js
 *.map
