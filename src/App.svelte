@@ -1,26 +1,34 @@
 <script>
-  import { getHistoryByPeriod, findPeriodsToShow } from './history'
+  import { getHistoryByPeriod, findPeriodsToShow, filterByText } from './history'
   import { getCurrentTabUrl } from './tabs'
   import PeriodHistoryItems from './PeriodHistoryItems.svelte'
 
   export let url
 
-  let host, origin, historyItemsByPeriod, shownPeriods = {}
+  let host, origin, historyItemsByPeriod, allHistoryItemsByPeriod, shownPeriods = {}
 
   const init = async () => {
     url = url || await getCurrentTabUrl();
     ({ host, origin } = new URL(url))
     historyItemsByPeriod = await getHistoryByPeriod({ origin })
-    shownPeriods = findPeriodsToShow(historyItemsByPeriod, 10)
+    allHistoryItemsByPeriod = historyItemsByPeriod
+    shownPeriods = findPeriodsToShow(historyItemsByPeriod, 50)
   }
 
   const historyPromise = init()
+
+  const filter = event => {
+    historyItemsByPeriod = filterByText(allHistoryItemsByPeriod, event.target.value)
+    shownPeriods = findPeriodsToShow(historyItemsByPeriod, 50)
+  }
+
 </script>
 
 {#await historyPromise}
-  Loading history...
+  <p class="loading">Loading history...</p>
 {:then}
   <h1>{host}</h1>
+  <input type="text" placeholder="filter..." on:keyup={filter}>
   <ul class="history-items-by-period">
     {#each Object.entries(historyItemsByPeriod) as [ period, periodHistoryItems ] (period)}
       <PeriodHistoryItems
@@ -30,6 +38,8 @@
         {origin}
         on:toggle={() => shownPeriods[period] = !shownPeriods[period]}
         />
+    {:else}
+      <p class="empty">nothing found</p>
     {/each}
   </ul>
 {:catch error}
@@ -58,5 +68,12 @@
     margin: 1em 0 0.5em 0;
     color: #aaa;
     text-align: center;
+  }
+  .loading, .empty{
+    text-align: center;
+    padding: 1em;
+  }
+  .empty{
+    font-style: italic;
   }
 </style>

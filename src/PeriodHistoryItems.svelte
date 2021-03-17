@@ -17,7 +17,7 @@
   {#if shownPeriods[period]}
     <ul in:slide={{ duration: 100 }} out:slide={{ duration: 100 }}>
       {#each periodHistoryItems as item (item.id)}
-        <HistoryItem {item} {origin}  />
+        <HistoryItem {item} {origin} />
       {/each}
     </ul>
   {/if}

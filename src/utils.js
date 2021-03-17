@@ -14,3 +14,14 @@ export const daysAgoText = epochTime => {
   if (numberOfDaysAgo < 365 * 10) return 'this last 10 year'
   return 'a while ago'
 }
+
+const currentYear = new Date().getFullYear()
+
+export const localDate = time => {
+  const date = new Date(time)
+  if (date.getFullYear() === currentYear) {
+    return date.toLocaleDateString(navigator.language, { month: 'long', day: 'numeric' })
+  } else {
+    return date.toLocaleDateString(navigator.language, { year: 'numeric', month: 'long', day: 'numeric' })
+  }
+}

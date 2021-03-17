@@ -1,9 +1,11 @@
 <script>
-  import { daysAgoText } from './utils'
+  import { daysAgo, daysAgoText, localDate } from './utils'
   export let item, origin
 
   const getHighlightClass = visitCount => `highlight-${Math.trunc(Math.log10(visitCount))}`
 
+  const daysAgoCount = daysAgo(item.lastVisitTime)
+  const daysAgoLabel = daysAgoCount > 2 ? `${daysAgoCount} days ago` : ''
 </script>
 
 <li class="history-item">
@@ -14,7 +16,13 @@
       <h3 class="title">{item.title}</h3>
       <p class="url">{item.url.replace(origin, '')}</p>
     </div>
-    <span class="visit-count {getHighlightClass(item.visitCount)}">{item.visitCount}</span>
+    {#if daysAgoLabel}
+      <p class="last-visit-absolute-date">{localDate(item.lastVisitTime)}</p>
+      <p class="last-visit-relative-date">{daysAgoLabel}</p>
+    {/if}
+    <div class="visit-count-wrapper">
+      <p class="visit-count {getHighlightClass(item.visitCount)}">{item.visitCount}</p>
+    </div>
   </a>
 </li>
 
@@ -28,11 +36,15 @@
     margin: 0.1em 0;
     border-radius: 2px;
     text-decoration: none;
+    color: #222;
     background-color: #eee;
     transition: background-color 0.3s ease;
   }
   .history-item a:hover{
     background-color: #fafafa;
+  }
+  .info{
+    margin-right: auto;
   }
   .url{
     color: #555;
@@ -46,28 +58,31 @@
     padding: 0 0.2em;
     color: white;
   }
-  .highlight-0{
-    background-color: #bbb;
-  }
-  .highlight-1{
-    background-color: #175365;
-  }
-  .highlight-2{
-    background-color: #4aa;
-  }
-  .highlight-3{
-    background-color: yellowgreen;
-  }
+  .highlight-0{ background-color: #bbb; }
+  .highlight-1{ background-color: #175365; }
+  .highlight-2{ background-color: #4aa; }
+  .highlight-3{ background-color: yellowgreen; }
   .highlight-4{
     background-color: yellow;
     color: #222;
   }
-  h3{
+  h3, p{
     padding: 0;
+    margin: 0;
     line-height: 1rem;
     font-size: 1rem;
+  }
+  h3{
     color: #222;
-    margin: 0;
+  }
+  .last-visit-absolute-date{
+    color: #444;
+    margin: 0 0.5em;
+  }
+  .last-visit-relative-date{
+    color: #777;
+    width: 6em;
+    text-align: right;
   }
   /*Large screens*/
   @media screen and (min-width: 800px) {
@@ -83,6 +98,18 @@
     }
     .url{
       margin-left: 0.5em;
+    }
+    .visit-count-wrapper{
+      width: 2em;
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+    }
+  }
+  /*Small screens*/
+  @media screen and (max-width: 600px) {
+    .last-visit-relative-date, .last-visit-absolute-date{
+      display: none;
     }
   }
 </style>

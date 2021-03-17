@@ -29,3 +29,15 @@ export function findPeriodsToShow (historyItemsByPeriod, limit) {
   }
   return shownPeriod
 }
+
+export function filterByText (historyItemsByPeriod, text) {
+  if (!text || text === '') return historyItemsByPeriod
+  const filteredItemsByPeriod = {}
+  const pattern = new RegExp(text, 'i')
+  const titleOrUrlMatch = item => pattern.test(item.title) || pattern.test(item.url)
+  for (const [ period, items ] of Object.entries(historyItemsByPeriod)) {
+    const filteredItems = items.filter(titleOrUrlMatch)
+    if (filteredItems.length > 0) filteredItemsByPeriod[period] = filteredItems
+  }
+  return filteredItemsByPeriod
+}
