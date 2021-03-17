@@ -23,7 +23,13 @@
   <h1>{host}</h1>
   <ul class="history-items-by-period">
     {#each Object.entries(historyItemsByPeriod) as [ period, periodHistoryItems ] (period)}
-      <PeriodHistoryItems {period} {periodHistoryItems} {shownPeriods} {origin} />
+      <PeriodHistoryItems
+        {period}
+        {periodHistoryItems}
+        {shownPeriods}
+        {origin}
+        on:toggle={() => shownPeriods[period] = !shownPeriods[period]}
+        />
     {/each}
   </ul>
 {:catch error}
@@ -42,16 +48,14 @@
     list-style: none;
     margin: 0;
     padding: 0;
-  }
-  .history-items-by-period:not(:empty){
-    min-width: 40em;
+    line-height: 1rem;
   }
   h1{
     padding: 0;
     line-height: 1rem;
-    font-size: 1rem;
+    font-size: 1.2rem;
     color: #ddd;
-    margin: 0.5em 0;
+    margin: 1em 0 0.5em 0;
     color: #aaa;
     text-align: center;
   }

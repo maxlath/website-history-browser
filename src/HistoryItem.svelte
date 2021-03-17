@@ -6,6 +6,7 @@
 <li class="history-item">
   <a href="{item.url}" title="{item.title} (total visits: {item.visitCount}, last visit: {daysAgoText(item.lastVisitTime)}, {new Date(item.lastVisitTime).toLocaleDateString()})">
     <div class="info">
+      <!-- TODO: display favicon once https://bugzilla.mozilla.org/show_bug.cgi?id=1315616 is solved -->
       <h3 class="title">{item.title}</h3>
       <p class="url">{item.url.replace(origin, '')}</p>
     </div>
@@ -33,6 +34,7 @@
     color: #777;
     overflow: hidden;
     font-size: 0.8em;
+    margin: 0;
   }
   .visit-count{
     display: flex;
@@ -56,5 +58,20 @@
     font-size: 1rem;
     color: #222;
     margin: 0;
+  }
+  /*Large screens*/
+  @media screen and (min-width: 800px) {
+    .title{
+      max-width: 50em;
+    }
+    .info{
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+    }
+    .url{
+      margin-left: 1em;
+    }
   }
 </style>
