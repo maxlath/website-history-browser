@@ -8,13 +8,22 @@
 
   let host, origin, historyItemsByPeriod, globalTitle, historyItemsSortedByVisits, textFilter
   let allHistoryItems = [], historyItems = [], shownPeriods = {}, sortMode = 'date', bookmarksOnly = false
+  let initalized = false
 
   const init = async () => {
+    const { settings = {} } = await browser.storage.local.get('settings')
+    console.log('recovered settings', settings)
+    if (settings.bookmarksOnly != null) bookmarksOnly = settings.bookmarksOnly
+    if (settings.textFilter != null) textFilter = settings.textFilter
+    if (settings.sortMode != null) sortMode = settings.sortMode
+
     url = url || await getCurrentTabUrl()
     ;({ host, origin } = new URL(url))
     ;({ historyItems, globalTitle } = await getHistoryItems({ origin }))
     allHistoryItems = historyItems
+    initalized = true
   }
+
   const waitingForInitialData = init()
 
   $: {
@@ -28,6 +37,15 @@
       historyItemsSortedByVisits = historyItems.sort((a, b) => b.visitCount - a.visitCount)
     }
   }
+
+  $: {
+    if (initalized) {
+      const settings = { bookmarksOnly, textFilter, sortMode }
+      console.log('saving settings', settings)
+      browser.storage.local.set({ settings })
+    }
+  }
+
 </script>
 
 {#await waitingForInitialData}
@@ -48,7 +66,7 @@
       <option value="visits" selected>Number of visits</option>
     </select>
 
-    <input type="text" placeholder="filter..." on:keyup={event => textFilter = event.target.value}>
+    <input type="text" placeholder="filter..." bind:value={textFilter}>
 
     <input name="bookmarks-only" type="checkbox" bind:checked={bookmarksOnly}>
     <label for="bookmarks-only">bookmarks only</label>
