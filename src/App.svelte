@@ -87,7 +87,10 @@
     <label for="bookmarks-only">bookmarks only</label>
 
     <p class="shown-rate">{historyItems.length} / {allHistoryItems.length}</p>
-    <button class="show-all" on:click={showAll}>show all</button>
+    <button class="show-all"
+      on:click={showAll}
+      disabled={historyItems.length === allHistoryItems.length}
+      >show all</button>
   </div>
 
   {#if sortMode === 'date'}
@@ -137,7 +140,11 @@
     outline: none;
     cursor: pointer;
     background: inherit;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, opacity 0.3s ease;
+  }
+  :global(button:disabled){
+    cursor: not-allowed;
+    opacity: 0.8;
   }
   ul, p{
     list-style: none;
