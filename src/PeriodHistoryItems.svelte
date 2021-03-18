@@ -33,11 +33,7 @@
     padding: 0;
   }
   button{
-    padding: 0;
     margin: 1em 0 0.2em 0;
-    border: none;
-    outline: none;
-    cursor: pointer;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -45,7 +41,6 @@
     flex: 1;
     color: white;
     background-color: #175365ee;
-    transition: background-color 0.3s ease;
     border-radius: 3px;
   }
   button:hover{

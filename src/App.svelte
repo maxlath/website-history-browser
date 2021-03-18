@@ -26,6 +26,11 @@
 
   const waitingForInitialData = init()
 
+  function showAll () {
+    bookmarksOnly = false
+    textFilter = null
+  }
+
   $: {
     historyItems = filterByText(allHistoryItems, textFilter)
     if (bookmarksOnly) historyItems = historyItems.filter(hasBookmarks)
@@ -72,6 +77,7 @@
     <label for="bookmarks-only">bookmarks only</label>
 
     <p class="shown-rate">{historyItems.length} / {allHistoryItems.length}</p>
+    <button class="show-all" on:click={showAll}>show all</button>
   </div>
 
   {#if sortMode === 'date'}
@@ -109,6 +115,16 @@
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     background-color: #222;
     color: white;
+  }
+  /* Reset */
+  :global(button){
+    padding: 0;
+    margin: 0;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background: inherit;
+    transition: background-color 0.3s ease;
   }
   ul, p{
     list-style: none;
@@ -150,5 +166,14 @@
   .shown-rate{
     margin-left: auto;
     color: #bbb;
+  }
+  .show-all{
+    background-color: #bbb;
+    padding: 0.2em;
+    border-radius: 3px;
+    margin-left: 0.5em;
+  }
+  .show-all:hover{
+    background-color: #ccc;
   }
 </style>
