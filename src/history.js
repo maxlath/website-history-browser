@@ -44,9 +44,9 @@ export function findPeriodsToShow (historyItemsByPeriod, limit) {
 
 export function filterByText (historyItems, text) {
   if (!text || text === '') return historyItems
-  const pattern = new RegExp(text, 'i')
+  text = text.toLowerCase()
   return historyItems.filter(item => {
-    return pattern.test(item.title) || pattern.test(item.url)
+    return item.title.toLowerCase().includes(text) || item.url.toLowerCase().includes(text)
   })
 }
 
