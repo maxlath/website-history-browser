@@ -3,6 +3,7 @@
   import { getCurrentTabUrl } from './tabs'
   import PeriodHistoryItems from './PeriodHistoryItems.svelte'
   import HistoryItem from './HistoryItem.svelte'
+  import { logErrorAndRethrow } from './utils'
 
   export let url
 
@@ -24,7 +25,7 @@
     initalized = true
   }
 
-  const waitingForInitialData = init()
+  const waitingForInitialData = init().catch(logErrorAndRethrow)
 
   function showAll () {
     bookmarksOnly = false
@@ -114,7 +115,10 @@
   {/if}
 
 {:catch error}
-  <p>{error}</p>
+  <h1>error</h1>
+  <pre>{error.message}
+{error.stack}</pre>
+  <p>see error logs for a better stack trace</p>
 {/await}
 
 <style>
@@ -206,6 +210,11 @@
   }
   .close:hover .cross, .close:focus .cross{
     background-color: #e2e2e2;
+  }
+  pre{
+    padding: 1em;
+    background-color: #111;
+    border-radius: 3px;
   }
   /*Small screens*/
   @media screen and (max-width: 800px) {

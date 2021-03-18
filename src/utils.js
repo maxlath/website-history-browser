@@ -14,3 +14,8 @@ export function keyBy (array, keyAttribute) {
   })
   return obj
 }
+
+export function logErrorAndRethrow (err) {
+  console.error(err)
+  throw err
+}
