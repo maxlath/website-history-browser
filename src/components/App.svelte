@@ -13,7 +13,6 @@
 
   const init = async () => {
     const { settings = {} } = await browser.storage.local.get('settings')
-    console.log('recovered settings', settings)
     if (settings.bookmarksOnly != null) bookmarksOnly = settings.bookmarksOnly
     if (settings.textFilter != null) textFilter = settings.textFilter
     if (settings.sortMode != null) sortMode = settings.sortMode
@@ -42,7 +41,6 @@
   $: {
     if (initalized) {
       const settings = { bookmarksOnly, textFilter, sortMode }
-      console.log('saving settings', settings)
       browser.storage.local.set({ settings })
     }
   }
