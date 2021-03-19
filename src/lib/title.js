@@ -31,5 +31,5 @@ export const getShortTitle = (itemTitle, globalTitle) => {
   .replace(endSeparators, '')
 }
 
-const partSeparators = /\s*[-—|]{1}\s*/g
-const endSeparators = /(\s*[-—|]{1}\s*)*$/
+const partSeparators = /\s*[-—–|]{1}\s*/g
+const endSeparators = /(\s*[-—–|]{1}\s*)*$/
