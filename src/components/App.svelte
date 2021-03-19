@@ -1,9 +1,9 @@
 <script>
-  import { getHistoryItems, filterByText, hasBookmarks } from './history'
-  import { getCurrentTabUrl } from './tabs'
   import HistoryItem from './HistoryItem.svelte'
-  import { logErrorAndRethrow } from './utils'
-  import { sortModes } from './sort'
+  import { getHistoryItems, filterByText, hasBookmarks } from '../lib/history'
+  import { getCurrentTabUrl } from '../lib/tabs'
+  import { logErrorAndRethrow } from '../lib/utils'
+  import { sortModes } from '../lib/sort'
 
   export let url
 

@@ -1,4 +1,4 @@
-import { getCurrentTabUrl } from './tabs'
+import { getCurrentTabUrl } from './lib/tabs'
 
 function openPopup () {
   browser.browserAction.openPopup()

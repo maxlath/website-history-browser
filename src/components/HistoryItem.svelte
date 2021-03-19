@@ -1,6 +1,6 @@
 <script>
-  import { daysAgo, daysAgoText, localDate } from './date'
-  import Star from './star.svelte'
+  import { daysAgo, daysAgoText, localDate } from '../lib/date'
+  import Star from './Star.svelte'
   export let item, origin
 
   const getHighlightClass = visitCount => `highlight-${Math.trunc(Math.log10(visitCount))}`

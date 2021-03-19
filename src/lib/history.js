@@ -1,6 +1,6 @@
 import { getItemPeriod } from './date'
 import { getBookmarksPerUrl } from './bookmarks'
-import { findGlobalTitle, getShortTitle } from 'title'
+import { findGlobalTitle, getShortTitle } from './title'
 
 const theBeginningOfTimes = new Date(0)
 
