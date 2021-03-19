@@ -32,7 +32,7 @@ total visits: ${item.visitCount}`
     justify-content: space-between;
     align-items: center;
     padding: 0.5em;
-    margin: 0.1em 0;
+    margin: 2px 0;
     border-radius: 2px;
     text-decoration: none;
     color: #222;
@@ -84,31 +84,31 @@ total visits: ${item.visitCount}`
     text-align: right;
   }
   .today .last-visit-relative-date{
-    color: greenyellow;
+    color: #119717;
   }
   .yesterday .last-visit-relative-date{
-    color: lightgreen;
+    color: #068561;
   }
   .this-last-week .last-visit-relative-date{
-    color: yellow;
+    color: #175365;
   }
   .this-last-month .last-visit-relative-date{
-    color: blueviolet;
+    color: #103335;
   }
   .this-last-year .last-visit-relative-date{
-    color: lightskyblue;
+    color: #002020;
   }
   .this-last-2-year .last-visit-relative-date{
-    color: orange;
+    color: #001515;
   }
   .this-last-5-year .last-visit-relative-date{
-    color: orangered;
+    color: #001010;
   }
   .this-last-10-year .last-visit-relative-date{
-    color: darkred;
+    color: #000505;
   }
   .a-while-ago .last-visit-relative-date{
-    color: darkslateblue;
+    color: #000;
   }
   /*Large screens*/
   @media screen and (min-width: 800px) {
