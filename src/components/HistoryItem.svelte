@@ -18,6 +18,7 @@ total visits: ${item.visitCount}`
     <h3 class="title">{item.shortTitle}</h3>
     <p class="url">{item.url.replace(origin, '')}</p>
   </div>
+  <!-- TODO: display bookmark tags once there is a standard API allowing it https://stackoverflow.com/questions/42294207/get-bookmark-tags  -->
   <p class="last-visit-absolute-date">{localDate(item.lastVisitTime)}</p>
   <p class="last-visit-relative-date">{daysAgoLabel}</p>
   <div class="visit-count-wrapper">
