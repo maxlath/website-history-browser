@@ -7,7 +7,7 @@
 
   export let url
 
-  let host, origin, globalTitle, textFilter
+  let protocol, host, origin, globalTitle, textFilter
   let allHistoryItems = [], historyItems = [], sortMode = 'date', bookmarksOnly = false
   let initalized = false
 
@@ -19,7 +19,7 @@
     if (settings.sortMode != null) sortMode = settings.sortMode
 
     url = url || await getCurrentTabUrl()
-    ;({ host, origin } = new URL(url))
+    ;({ protocol, host, origin } = new URL(url))
     ;({ historyItems, globalTitle } = await getHistoryItems({ origin }))
     allHistoryItems = historyItems
     initalized = true
@@ -52,6 +52,7 @@
   <p class="loading">Loading history...</p>
 {:then}
   <h1>
+    <img src="{protocol}//{host}/favicon.ico" alt="favicon" class="favicon">
     {#if globalTitle}{globalTitle} - {/if}
     <span class="host">{host}</span>
   </h1>
@@ -141,6 +142,14 @@
     margin: 1em 0 0.5em 0;
     color: #aaa;
     text-align: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .favicon{
+    max-height: 1em;
+    margin-right: 0.5em;
   }
   .host{
     color: white;

@@ -15,7 +15,6 @@ total visits: ${item.visitCount}`
 <a href="{item.url}" title="{title}" class="{item.period.className}">
   <div class="info">
     <span class="bookmarks"><Star bookmarks={item.bookmarks} /></span>
-    <!-- TODO: display favicon once https://bugzilla.mozilla.org/show_bug.cgi?id=1315616 is solved -->
     <h3 class="title">{item.shortTitle}</h3>
     <p class="url">{item.url.replace(origin, '')}</p>
   </div>
