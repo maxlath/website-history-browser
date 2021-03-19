@@ -1,5 +1,4 @@
-import { daysAgoText, periodByLabel } from './date'
-import { reorderObject } from './utils'
+import { getItemPeriod } from './date'
 import { getBookmarksPerUrl } from './bookmarks'
 const theBeginningOfTimes = new Date(0)
 
@@ -14,32 +13,10 @@ export async function getHistoryItems ({ origin }) {
   for (const item of historyItems) {
     item.shortTitle = getShortTitle(item.title, globalTitle)
     item.bookmarks = bookmarksPerUrl[item.url]
+    item.period = getItemPeriod(item.lastVisitTime)
   }
 
   return { historyItems, globalTitle }
-}
-
-export function spreadItemsByPeriod (historyItems) {
-  const historyItemsByPeriod = {}
-  for (const historyItem of historyItems) {
-    const period = historyItem._period || daysAgoText(historyItem.lastVisitTime)
-    historyItem._period = period
-    historyItemsByPeriod[period] = historyItemsByPeriod[period] || []
-    historyItemsByPeriod[period].push(historyItem)
-  }
-  return reorderObject(historyItemsByPeriod, byPeriodThreshold)
-}
-
-const byPeriodThreshold = (a, b) => periodByLabel[a].threshold - periodByLabel[b].threshold
-
-export function findPeriodsToShow (historyItemsByPeriod, limit) {
-  let total = 0
-  const shownPeriod = {}
-  for (const period in historyItemsByPeriod) {
-    shownPeriod[period] = total < limit
-    total += historyItemsByPeriod[period].length
-  }
-  return shownPeriod
 }
 
 export function filterByText (historyItems, text) {
@@ -92,7 +69,7 @@ const getShortTitle = (itemTitle, globalTitle) => {
   .replace(endSeparators, '')
 }
 
-const partSeparators = /\s*[-—\|]{1}\s*/g
-const endSeparators = /(\s*[-—\|]{1}\s*)*$/
+const partSeparators = /\s*[-—|]{1}\s*/g
+const endSeparators = /(\s*[-—|]{1}\s*)*$/
 
 export const hasBookmarks = item => item.bookmarks != null

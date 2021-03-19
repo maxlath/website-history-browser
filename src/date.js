@@ -14,9 +14,12 @@ const periods = [
   { thresold: 365 * 5, label: 'this last 5 year' },
   { thresold: 365 * 10, label: 'this last 10 year' },
   { thresold: Infinity, label: 'a while ago' },
-]
+].map(period => {
+  period.className = period.label.replace(/\s/g, '-')
+  return period
+})
 
-export const periodByLabel = keyBy(periods, 'label')
+const periodByLabel = keyBy(periods, 'label')
 
 export const daysAgoText = epochTime => {
   const numberOfDaysAgo = daysAgo(epochTime)
@@ -34,4 +37,9 @@ export const localDate = time => {
   } else {
     return date.toLocaleDateString(navigator.language, { year: 'numeric', month: 'long', day: 'numeric' })
   }
+}
+
+export const getItemPeriod = itemLastVisitTime => {
+  const periodLabel = daysAgoText(itemLastVisitTime)
+  return periodByLabel[periodLabel]
 }

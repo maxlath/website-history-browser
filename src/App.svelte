@@ -1,14 +1,14 @@
 <script>
-  import { getHistoryItems, spreadItemsByPeriod, findPeriodsToShow, filterByText, hasBookmarks } from './history'
+  import { getHistoryItems, filterByText, hasBookmarks } from './history'
   import { getCurrentTabUrl } from './tabs'
-  import PeriodHistoryItems from './PeriodHistoryItems.svelte'
   import HistoryItem from './HistoryItem.svelte'
   import { logErrorAndRethrow } from './utils'
+  import { sortModes } from './sort'
 
   export let url
 
-  let host, origin, historyItemsByPeriod, globalTitle, historyItemsSortedByVisits, textFilter
-  let allHistoryItems = [], historyItems = [], shownPeriods = {}, sortMode = 'date', bookmarksOnly = false
+  let host, origin, globalTitle, textFilter
+  let allHistoryItems = [], historyItems = [], sortMode = 'date', bookmarksOnly = false
   let initalized = false
 
   const init = async () => {
@@ -36,12 +36,7 @@
     historyItems = filterByText(allHistoryItems, textFilter)
     if (bookmarksOnly) historyItems = historyItems.filter(hasBookmarks)
 
-    if (sortMode === 'date') {
-      historyItemsByPeriod = spreadItemsByPeriod(historyItems)
-      shownPeriods = findPeriodsToShow(historyItemsByPeriod, 50)
-    } else if (sortMode === 'visits') {
-      historyItemsSortedByVisits = historyItems.sort((a, b) => b.visitCount - a.visitCount)
-    }
+    historyItems = historyItems.sort(sortModes[sortMode].fn)
   }
 
   $: {
@@ -51,7 +46,6 @@
       browser.storage.local.set({ settings })
     }
   }
-
 </script>
 
 {#await waitingForInitialData}
@@ -68,8 +62,9 @@
       name="sort"
       bind:value={sortMode}
       >
-      <option value="date" selected>Date</option>
-      <option value="visits" selected>Number of visits</option>
+      {#each Object.entries(sortModes) as [ modeKey, { label } ] }
+        <option value="{modeKey}">{label}</option>
+      {/each}
     </select>
 
     <div class="input-wrapper">
@@ -93,29 +88,13 @@
       >show all</button>
   </div>
 
-  {#if sortMode === 'date'}
-    <ul class="history-by-date">
-      {#each Object.entries(historyItemsByPeriod) as [ period, periodHistoryItems ] (period)}
-        <PeriodHistoryItems
-          {period}
-          {periodHistoryItems}
-          {shownPeriods}
-          {origin}
-          on:toggle={() => shownPeriods[period] = !shownPeriods[period]}
-          />
-      {:else}
-        <p class="empty">nothing found</p>
-      {/each}
-    </ul>
-  {:else if sortMode === 'visits'}
-    <ul class="history-by-visits">
-      {#each historyItemsSortedByVisits as item (item.id)}
-        <HistoryItem {item} {origin} />
-      {:else}
-        <p class="empty">nothing found</p>
-      {/each}
-    </ul>
-  {/if}
+  <ul class="history-items">
+    {#each historyItems as item (item.id)}
+      <HistoryItem {item} {origin} />
+    {:else}
+      <p class="empty">nothing found</p>
+    {/each}
+  </ul>
 
 {:catch error}
   <h1>error</h1>
@@ -171,14 +150,12 @@
   .empty{
     font-style: italic;
   }
-  .history-by-visits{
-    margin-top: 1em;
-  }
   .controls{
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    margin-bottom: 1em;
   }
   select, input[type="text"]{
     margin: 0 0.5em;

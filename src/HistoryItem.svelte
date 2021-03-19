@@ -6,13 +6,13 @@
   const getHighlightClass = visitCount => `highlight-${Math.trunc(Math.log10(visitCount))}`
 
   const daysAgoCount = daysAgo(item.lastVisitTime)
-  const daysAgoLabel = daysAgoCount > 2 ? `${daysAgoCount} days ago` : ''
+  const daysAgoLabel = daysAgoCount >= 2 ? `${daysAgoCount} days ago` : item.period.label
   const title = `${item.title}\n${item.url}
 last visit: ${daysAgoText(item.lastVisitTime)}, ${localDate(item.lastVisitTime)}
 total visits: ${item.visitCount}`
 </script>
 
-<li class="history-item">
+<li class="history-item {item.period.className}">
   <a href="{item.url}" title="{title}">
     <div class="info">
       <span class="bookmarks"><Star bookmarks={item.bookmarks} /></span>
@@ -20,10 +20,8 @@ total visits: ${item.visitCount}`
       <h3 class="title">{item.shortTitle}</h3>
       <p class="url">{item.url.replace(origin, '')}</p>
     </div>
-    {#if daysAgoLabel}
-      <p class="last-visit-absolute-date">{localDate(item.lastVisitTime)}</p>
-      <p class="last-visit-relative-date">{daysAgoLabel}</p>
-    {/if}
+    <p class="last-visit-absolute-date">{localDate(item.lastVisitTime)}</p>
+    <p class="last-visit-relative-date">{daysAgoLabel}</p>
     <div class="visit-count-wrapper">
       <p class="visit-count {getHighlightClass(item.visitCount)}">{item.visitCount}</p>
     </div>
@@ -87,6 +85,33 @@ total visits: ${item.visitCount}`
     color: #777;
     width: 6em;
     text-align: right;
+  }
+  .today .last-visit-relative-date{
+    color: greenyellow;
+  }
+  .yesterday .last-visit-relative-date{
+    color: lightgreen;
+  }
+  .this-last-week .last-visit-relative-date{
+    color: yellow;
+  }
+  .this-last-month .last-visit-relative-date{
+    color: blueviolet;
+  }
+  .this-last-year .last-visit-relative-date{
+    color: lightskyblue;
+  }
+  .this-last-2-year .last-visit-relative-date{
+    color: orange;
+  }
+  .this-last-5-year .last-visit-relative-date{
+    color: orangered;
+  }
+  .this-last-10-year .last-visit-relative-date{
+    color: darkred;
+  }
+  .a-while-ago .last-visit-relative-date{
+    color: darkslateblue;
   }
   /*Large screens*/
   @media screen and (min-width: 800px) {
