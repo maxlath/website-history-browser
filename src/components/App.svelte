@@ -90,7 +90,9 @@
 
   <ul class="history-items">
     {#each historyItems as item (item.id)}
-      <HistoryItem {item} {origin} />
+      <li >
+        <HistoryItem {item} {origin} />
+      </li>
     {:else}
       <p class="empty">nothing found</p>
     {/each}

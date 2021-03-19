@@ -12,24 +12,22 @@ last visit: ${daysAgoText(item.lastVisitTime)}, ${localDate(item.lastVisitTime)}
 total visits: ${item.visitCount}`
 </script>
 
-<li class="history-item {item.period.className}">
-  <a href="{item.url}" title="{title}">
-    <div class="info">
-      <span class="bookmarks"><Star bookmarks={item.bookmarks} /></span>
-      <!-- TODO: display favicon once https://bugzilla.mozilla.org/show_bug.cgi?id=1315616 is solved -->
-      <h3 class="title">{item.shortTitle}</h3>
-      <p class="url">{item.url.replace(origin, '')}</p>
-    </div>
-    <p class="last-visit-absolute-date">{localDate(item.lastVisitTime)}</p>
-    <p class="last-visit-relative-date">{daysAgoLabel}</p>
-    <div class="visit-count-wrapper">
-      <p class="visit-count {getHighlightClass(item.visitCount)}">{item.visitCount}</p>
-    </div>
-  </a>
-</li>
+<a href="{item.url}" title="{title}" class="{item.period.className}">
+  <div class="info">
+    <span class="bookmarks"><Star bookmarks={item.bookmarks} /></span>
+    <!-- TODO: display favicon once https://bugzilla.mozilla.org/show_bug.cgi?id=1315616 is solved -->
+    <h3 class="title">{item.shortTitle}</h3>
+    <p class="url">{item.url.replace(origin, '')}</p>
+  </div>
+  <p class="last-visit-absolute-date">{localDate(item.lastVisitTime)}</p>
+  <p class="last-visit-relative-date">{daysAgoLabel}</p>
+  <div class="visit-count-wrapper">
+    <p class="visit-count {getHighlightClass(item.visitCount)}">{item.visitCount}</p>
+  </div>
+</a>
 
 <style>
-  .history-item a{
+  a{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -42,7 +40,7 @@ total visits: ${item.visitCount}`
     background-color: #eee;
     transition: background-color 0.3s ease;
   }
-  .history-item a:hover{
+  a:hover{
     background-color: #fafafa;
   }
   .info{
