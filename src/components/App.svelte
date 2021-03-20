@@ -1,5 +1,6 @@
 <script>
   import HistoryItem from './HistoryItem.svelte'
+  import Sections from './Sections.svelte'
   import { getHistoryItems, filterByText, hasBookmarks } from '../lib/history'
   import { getCurrentTabUrl } from '../lib/tabs'
   import { logErrorAndRethrow } from '../lib/utils'
@@ -7,8 +8,8 @@
 
   export let url
 
-  let protocol, host, origin, globalTitle, textFilter
-  let allHistoryItems = [], historyItems = [], sortMode = 'date', bookmarksOnly = false
+  let protocol, host, origin, globalTitle, sections, textFilter
+  let allHistoryItems = [], historyItems = [], sectionItems = [], selectedSections = [], sortMode = 'date', bookmarksOnly = false
   let initalized = false
 
   const init = async () => {
@@ -19,8 +20,8 @@
 
     url = url || await getCurrentTabUrl()
     ;({ protocol, host, origin } = new URL(url))
-    ;({ historyItems, globalTitle } = await getHistoryItems({ origin }))
-    allHistoryItems = historyItems
+    ;({ historyItems, globalTitle, sections } = await getHistoryItems({ origin }))
+    allHistoryItems = sectionItems = historyItems
     initalized = true
   }
 
@@ -32,7 +33,7 @@
   }
 
   $: {
-    historyItems = filterByText(allHistoryItems, textFilter)
+    historyItems = filterByText(sectionItems, textFilter)
     if (bookmarksOnly) historyItems = historyItems.filter(hasBookmarks)
 
     historyItems = historyItems.sort(sortModes[sortMode].fn)
@@ -49,11 +50,22 @@
 {#await waitingForInitialData}
   <p class="loading">Loading history...</p>
 {:then}
-  <h1>
+  <div class="header">
     <img src="{protocol}//{host}/favicon.ico" alt="favicon" class="favicon">
     {#if globalTitle}{globalTitle} - {/if}
-    <span class="host">{host}</span>
-  </h1>
+    <h1 class="host">{host}</h1>
+    <Sections
+      {sections}
+      {selectedSections}
+      depth={0}
+      on:select={event => {
+        const { sectionName, sectionData, depth } = event.detail
+        sectionItems = sectionData.items
+        selectedSections = selectedSections.slice(0, depth)
+        selectedSections[depth] = sectionName
+      }}
+    />
+  </div>
 
   <div class="controls">
     <label for="sort">Sort by:</label>
@@ -126,13 +138,15 @@
     cursor: not-allowed;
     opacity: 0.8;
   }
-  ul, p{
+  :global(ul, li, p){
     list-style: none;
     margin: 0;
     padding: 0;
+  }
+  ul, p{
     line-height: 1rem;
   }
-  h1{
+  .header{
     padding: 0;
     line-height: 1rem;
     font-size: 1.2rem;
@@ -143,7 +157,8 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
   }
   .favicon{
     max-height: 1em;
@@ -151,6 +166,9 @@
   }
   .host{
     color: white;
+    padding: 0;
+    line-height: 1rem;
+    font-size: 1.2rem;
   }
   .loading, .empty{
     text-align: center;

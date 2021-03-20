@@ -11,3 +11,9 @@ export function logErrorAndRethrow (err) {
   console.error(err)
   throw err
 }
+
+export const property = attribute => obj => obj[attribute]
+
+export const sum = array => array.reduce(add, 0)
+
+export const add = (a, b) => a + b

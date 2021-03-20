@@ -16,9 +16,12 @@ export async function getHistoryItems ({ origin }) {
     item.shortTitle = getShortTitle(item.title, globalTitle)
     item.bookmarks = bookmarksPerUrl[item.url]
     item.period = getItemPeriod(item.lastVisitTime)
+    item.sections = getSections(item.url)
   }
 
-  return { historyItems, globalTitle }
+  const sections = getSectionsTree(historyItems)
+
+  return { historyItems, globalTitle, sections }
 }
 
 export function filterByText (historyItems, text) {
@@ -39,3 +42,29 @@ const getHistoryItem = async origin => {
 }
 
 export const hasBookmarks = item => item.bookmarks != null
+
+const getSections = url => {
+  const { pathname } = new URL(url)
+  return pathname
+  .slice(1)
+  .replace(/\/$/, '')
+  .split('/')
+  .slice(0, -1)
+}
+
+const getSectionsTree = items => {
+  const sectionsTree = { subsections: {} }
+  for (const item of items) {
+    const { sections } = item
+    let parentSection = sectionsTree
+    for (const section of sections) {
+      if (section !== '') {
+        parentSection.subsections[section] = parentSection.subsections[section] || { items: [], subsections: {} }
+        parentSection.subsections[section].items.push(item)
+        parentSection = parentSection.subsections[section]
+      }
+    }
+  }
+  console.log('subsections', sectionsTree.subsections)
+  return sectionsTree.subsections
+}

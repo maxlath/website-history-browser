@@ -16,3 +16,7 @@ export const sortModes = {
     fn: (a, b) => b.title.toLowerCase() < a.title.toLowerCase() ? 1 : -1,
   },
 }
+
+export function entriesByNumberOfItems (a, b) {
+  return b[1].items.length - a[1].items.length
+}
