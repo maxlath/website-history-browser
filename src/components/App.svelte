@@ -61,6 +61,8 @@
       browser.storage.local.set({ settings })
     }
   }
+
+  $: allItemsShown = historyItems.length === allHistoryItems.length
 </script>
 
 {#await waitingForInitialData}
@@ -111,10 +113,10 @@
     <input name="bookmarks-only" type="checkbox" bind:checked={bookmarksOnly}>
     <label for="bookmarks-only">bookmarks only</label>
 
-    <p class="shown-rate">{historyItems.length} / {allHistoryItems.length}</p>
+    <p class="shown-rate" class:all-shown={allItemsShown}>{historyItems.length} / {allHistoryItems.length}</p>
     <button class="show-all"
       on:click={showAll}
-      disabled={historyItems.length === allHistoryItems.length}
+      disabled={allItemsShown}
       >show all</button>
   </div>
 
@@ -220,6 +222,9 @@
   .shown-rate{
     margin-left: auto;
     color: #bbb;
+  }
+  .shown-rate:not(.all-shown){
+    color: yellow;
   }
   .show-all{
     background-color: #bbb;
