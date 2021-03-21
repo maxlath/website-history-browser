@@ -30,6 +30,10 @@
   function showAll () {
     bookmarksOnly = false
     textFilter = null
+    resetSection()
+  }
+
+  function resetSection () {
     selectedSections = []
     sectionItems = allHistoryItems
   }
@@ -53,9 +57,11 @@
   <p class="loading">Loading history...</p>
 {:then}
   <div class="header">
-    <img src="{protocol}//{host}/favicon.ico" alt="favicon" class="favicon" on:error={hide}>
-    {#if globalTitle}{globalTitle} - {/if}
-    <h1 class="host">{host}</h1>
+    <button on:click={resetSection} disabled={selectedSections.length === 0}>
+      <img src="{protocol}//{host}/favicon.ico" alt="favicon" class="favicon" on:error={hide}>
+      {#if globalTitle}<span class="global-title">{globalTitle} - </span>{/if}
+      <h1 class="host">{host}</h1>
+    </button>
     <Sections
       {sections}
       {selectedSections}
@@ -153,7 +159,7 @@
     line-height: 1rem;
     font-size: 1.2rem;
     color: #ddd;
-    margin: 1em 0 0.5em 0;
+    margin: 0.5em 0;
     color: #aaa;
     text-align: center;
     display: flex;
@@ -161,6 +167,17 @@
     align-items: center;
     justify-content: flex-start;
     flex-wrap: wrap;
+  }
+  .header button{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  .global-title{
+    margin-top: 0.1em;
+    margin-right: 0.3em;
+    color: #ddd;
   }
   .favicon{
     max-height: 1em;
