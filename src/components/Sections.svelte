@@ -14,31 +14,33 @@
     .reduce(add, 0)
 </script>
 
-<span class="chevron">&gt;</span>
+{#if sectionsTotal > 0}
+  <span class="chevron">&gt;</span>
 
-<div class="section-selector">
-  {#if depthSelectedSection}
-    <button class="selected">{depthSelectedSection}</button>
-  {:else}
-    <button class="suggestion">
-      <span class="name">all</span>
-      <span class="count">{sectionsTotal}</span>
-    </button>
-  {/if}
-  <ul class="options">
-    {#each Object.entries(sections).sort(entriesByNumberOfItems) as [ sectionName, sectionData ]}
-      <li class="option">
-        <button on:click={() => {
-          console.log('select', { sectionName, sectionData })
-          dispatch('select', { sectionName, sectionData, depth })
-          }}>
-          <span class="name">{sectionName}</span>
-          <span class="count">{sectionData.items.length}</span>
-        </button>
-      </li>
-    {/each}
-  </ul>
-</div>
+  <div class="section-selector">
+    {#if depthSelectedSection}
+      <button class="selected">{depthSelectedSection}</button>
+    {:else}
+      <button class="suggestion">
+        <span class="name">all</span>
+        <span class="count">{sectionsTotal}</span>
+      </button>
+    {/if}
+    <ul class="options">
+      {#each Object.entries(sections).sort(entriesByNumberOfItems) as [ sectionName, sectionData ]}
+        <li class="option">
+          <button on:click={() => {
+            console.log('select', { sectionName, sectionData })
+            dispatch('select', { sectionName, sectionData, depth })
+            }}>
+            <span class="name">{sectionName}</span>
+            <span class="count">{sectionData.items.length}</span>
+          </button>
+        </li>
+      {/each}
+    </ul>
+  </div>
+{/if}
 
 {#if depthSelectedSection && sections[depthSelectedSection].subsections != null}
   <svelte:self
