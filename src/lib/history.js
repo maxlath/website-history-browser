@@ -53,16 +53,20 @@ const getSections = url => {
 }
 
 const getSectionsTree = items => {
-  const sectionsTree = { subsections: {}, path: [] }
+  const sectionsTree = { subsections: {}, path: [], bookmarksCount: 0 }
   for (const item of items) {
     const { sections } = item
     let parentSection = sectionsTree
     for (const section of sections) {
       if (section !== '') {
-        parentSection.subsections[section] = parentSection.subsections[section] || { items: [], subsections: {} }
-        parentSection.subsections[section].items.push(item)
-        parentSection.subsections[section].path = parentSection.path.concat(section)
-        parentSection = parentSection.subsections[section]
+        if (parentSection.subsections[section] == null) {
+          parentSection.subsections[section] = { items: [], subsections: {}, bookmarksCount: 0 }
+        }
+        const subsection = parentSection.subsections[section]
+        subsection.items.push(item)
+        subsection.path = parentSection.path.concat(section)
+        if (item.bookmarks != null) subsection.bookmarksCount++
+        parentSection = subsection
       }
     }
   }

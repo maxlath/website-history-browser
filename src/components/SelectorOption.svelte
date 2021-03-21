@@ -2,6 +2,7 @@
   import { entriesByNumberOfItems } from '../lib/sort'
   import { bubbleUp } from '../lib/utils'
   import { createEventDispatcher } from 'svelte'
+  import Star from './Star.svelte'
 
   const dispatch = createEventDispatcher()
 
@@ -13,6 +14,12 @@
 <li class="option">
   <button on:click={() => dispatch('select', sectionData)}>
     <span class="name">{sectionName}</span>
+    <div class="bookmarks-count">
+      {#if sectionData.bookmarksCount > 0}
+        <p>{sectionData.bookmarksCount}</p>
+        <Star bookmarksCount={sectionData.bookmarksCount} />
+      {/if}
+    </div>
     <span class="count">{sectionData.items.length}</span>
     <span class="chevron">{#if hasSubsections}&gt;{/if}</span>
   </button>
@@ -63,12 +70,23 @@
   .option:hover > .suboptions, .option:focus > .suboptions{
     visibility: visible;
   }
+  .bookmarks-count{
+    width: 3em;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+  }
+  .bookmarks-count p{
+    margin: 0 0.3em 0 0.5em;
+    color: #ffe900;
+  }
   .name{
     color: white;
     margin-right: 0.5em;
   }
   .count{
-    margin-left: auto;
     color: #777;
   }
   .chevron{
