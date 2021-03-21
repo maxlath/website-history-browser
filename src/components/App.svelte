@@ -11,7 +11,7 @@
 
   let protocol, host, origin, globalTitle, textFilter
   let allHistoryItems = [], historyItems = [], sectionItems = [], selectedPath = [], sections = {}
-  let initalized = false, sortMode = 'date', bookmarksOnly = false, maxAge = Infinity
+  let initalized = false, sortMode = 'date', bookmarksOnly = false, maxAge = Infinity, bookmarksCount = 0
 
   const init = async () => {
     url = url || await getCurrentTabUrl()
@@ -67,8 +67,9 @@
   $: {
     // TODO: optimization: reduce filters to a single loop
     historyItems = filterByText(sectionItems, textFilter)
-    if (bookmarksOnly) historyItems = historyItems.filter(hasBookmarks)
     historyItems = historyItems.filter(item => item.period.thresold <= maxAge)
+    if (bookmarksOnly) historyItems = historyItems.filter(hasBookmarks)
+    else bookmarksCount = historyItems.filter(hasBookmarks).length
 
     historyItems = historyItems.sort(sortModes[sortMode].fn)
   }
@@ -130,8 +131,13 @@
       {/each}
     </select>
 
-    <input name="bookmarks-only" type="checkbox" bind:checked={bookmarksOnly}>
-    <label for="bookmarks-only">bookmarks only</label>
+    {#if bookmarksCount > 0}
+      <input name="bookmarks-only" type="checkbox" bind:checked={bookmarksOnly}>
+      <label for="bookmarks-only">
+        bookmarks only
+        <span class="count">({bookmarksCount})</span>
+      </label>
+    {/if}
 
     <p class="shown-rate" class:all-shown={allItemsShown}>{historyItems.length} / {allHistoryItems.length}</p>
     <button class="show-all"
@@ -281,6 +287,9 @@
     padding: 1em;
     background-color: #111;
     border-radius: 3px;
+  }
+  label .count{
+    color: #777;
   }
   /*Small screens*/
   @media screen and (max-width: 800px) {
