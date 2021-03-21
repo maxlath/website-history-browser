@@ -66,6 +66,23 @@ const getSectionsTree = items => {
       }
     }
   }
-  console.log('subsections', sectionsTree.subsections)
   return sectionsTree.subsections
+}
+
+export function getSectionItemsFromPath (sections, path) {
+  let selectedSection = sections
+  let i = 0
+  while (i < path.length) {
+    const sectionName = path[i++]
+    if (!(sectionName && selectedSection)) return []
+    if (selectedSection[sectionName]) {
+      selectedSection = selectedSection[sectionName]
+    } else if (selectedSection.subsections?.[sectionName]) {
+      selectedSection = selectedSection.subsections[sectionName]
+    } else {
+      return []
+    }
+    if (!selectedSection) return []
+  }
+  return selectedSection.items
 }

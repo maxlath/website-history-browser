@@ -7,14 +7,16 @@
 
   export let sectionName, sectionData
   const sections = sectionData.subsections
+  const hasSubsections = Object.keys(sections).length > 0
 </script>
 
 <li class="option">
-  <button on:click={() => dispatch('select', { sectionName, sectionData })}>
+  <button on:click={() => dispatch('select', sectionData)}>
     <span class="name">{sectionName}</span>
     <span class="count">{sectionData.items.length}</span>
+    <span class="chevron">{#if hasSubsections}&gt;{/if}</span>
   </button>
-  {#if Object.keys(sections).length > 0}
+  {#if hasSubsections}
     <ul class="suboptions">
       {#each Object.entries(sections).sort(entriesByNumberOfItems) as [ sectionName, sectionData ]}
         <svelte:self
@@ -33,7 +35,7 @@
   }
   .option button{
     flex: 1;
-    padding: 0.2em 0.5em;
+    padding: 0.5em 1em;
     background-color: #111;
     white-space: nowrap;
     text-align: left;
@@ -67,6 +69,11 @@
   }
   .count{
     margin-left: auto;
+    color: #777;
+  }
+  .chevron{
+    width: 1em;
+    text-align: right;
     color: #777;
   }
 </style>

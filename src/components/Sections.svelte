@@ -4,9 +4,9 @@
   import { createEventDispatcher } from 'svelte'
   import SelectorOption from './SelectorOption.svelte'
 
-  export let sections, selectedSections, depth
+  export let sections, selectedPath, depth
 
-  $: depthSelectedSection = selectedSections[depth]
+  $: depthSelectedSectionName = selectedPath[depth]
 
   const dispatch = createEventDispatcher()
 
@@ -19,12 +19,14 @@
   <span class="chevron">&gt;</span>
 
   <div class="section-selector">
-    {#if depthSelectedSection}
-      <button class="selected">{depthSelectedSection}</button>
+    {#if depthSelectedSectionName}
+      <button
+        class="selected"
+        on:click={() => dispatch('select', sections[depthSelectedSectionName])}
+        >{depthSelectedSectionName}</button>
     {:else}
       <button class="suggestion">
         <span class="name">all</span>
-        <span class="count">{sectionsTotal}</span>
       </button>
     {/if}
     <ul class="options">
@@ -39,10 +41,10 @@
   </div>
 {/if}
 
-{#if depthSelectedSection && sections[depthSelectedSection].subsections != null}
+{#if depthSelectedSectionName && sections[depthSelectedSectionName].subsections != null}
   <svelte:self
-    sections={sections[depthSelectedSection].subsections}
-    {selectedSections}
+    sections={sections[depthSelectedSectionName].subsections}
+    {selectedPath}
     depth={depth + 1}
     on:select={bubbleUp(dispatch, 'select')}
   />

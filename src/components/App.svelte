@@ -1,7 +1,7 @@
 <script>
   import HistoryItem from './HistoryItem.svelte'
   import Sections from './Sections.svelte'
-  import { getHistoryItems, filterByText, hasBookmarks } from '../lib/history'
+  import { getHistoryItems, filterByText, hasBookmarks, getSectionItemsFromPath } from '../lib/history'
   import { getCurrentTabUrl } from '../lib/tabs'
   import { logErrorAndRethrow, hide } from '../lib/utils'
   import { sortModes } from '../lib/sort'
@@ -9,20 +9,23 @@
 
   export let url
 
-  let protocol, host, origin, globalTitle, sections, textFilter
-  let allHistoryItems = [], historyItems = [], sectionItems = [], selectedSections = []
+  let protocol, host, origin, globalTitle, textFilter
+  let allHistoryItems = [], historyItems = [], sectionItems = [], selectedPath = [], sections = {}
   let initalized = false, sortMode = 'date', bookmarksOnly = false, maxAge = Infinity
 
   const init = async () => {
+    url = url || await getCurrentTabUrl()
+    ;({ protocol, host, origin } = new URL(url))
+
     const { settings = {} } = await browser.storage.local.get('settings')
     if (settings.bookmarksOnly != null) bookmarksOnly = settings.bookmarksOnly
     if (settings.textFilter != null) textFilter = settings.textFilter
     if (settings.sortMode != null) sortMode = settings.sortMode
+    if (settings.maxAge != null) maxAge = settings.maxAge
+    if (origin === settings.origin && settings.selectedPath != null) selectedPath = settings.selectedPath
 
-    url = url || await getCurrentTabUrl()
-    ;({ protocol, host, origin } = new URL(url))
     ;({ historyItems, globalTitle, sections } = await getHistoryItems({ origin }))
-    allHistoryItems = sectionItems = historyItems
+    allHistoryItems = historyItems
     initalized = true
   }
 
@@ -36,18 +39,33 @@
   }
 
   function resetSection () {
-    selectedSections = []
+    selectedPath = []
     sectionItems = allHistoryItems
   }
 
   function selectSection (event) {
-    const { sectionName, sectionData, depth } = event.detail
-    console.log('selected', { sectionName, sectionData, depth })
-    sectionItems = sectionData.items
-    selectedSections = sectionData.path
+    const { items, path } = event.detail
+    sectionItems = items
+    selectedPath = path
   }
 
   $: {
+    if (selectedPath.length === 0) {
+      sectionItems = allHistoryItems
+    } else {
+      try {
+        sectionItems = getSectionItemsFromPath(sections, selectedPath)
+      } catch (err) {
+        // An error may occure if a path was previously selected,
+        // but that the corresponding items have been deleted since then
+        console.error(err)
+        resetSection()
+      }
+    }
+  }
+
+  $: {
+    // TODO: optimization: reduce filters to a single loop
     historyItems = filterByText(sectionItems, textFilter)
     if (bookmarksOnly) historyItems = historyItems.filter(hasBookmarks)
     historyItems = historyItems.filter(item => item.period.thresold <= maxAge)
@@ -55,9 +73,11 @@
     historyItems = historyItems.sort(sortModes[sortMode].fn)
   }
 
+
   $: {
     if (initalized) {
-      const settings = { bookmarksOnly, textFilter, sortMode }
+      const settings = { bookmarksOnly, textFilter, sortMode, maxAge, selectedPath, origin }
+      // TODO: debounce
       browser.storage.local.set({ settings })
     }
   }
@@ -69,14 +89,14 @@
   <p class="loading">Loading history...</p>
 {:then}
   <div class="header">
-    <button on:click={resetSection} disabled={selectedSections.length === 0}>
+    <button on:click={resetSection} disabled={selectedPath.length === 0}>
       <img src="{protocol}//{host}/favicon.ico" alt="favicon" class="favicon" on:error={hide}>
       {#if globalTitle}<span class="global-title">{globalTitle} - </span>{/if}
       <h1 class="host">{host}</h1>
     </button>
     <Sections
       {sections}
-      {selectedSections}
+      {selectedPath}
       depth={0}
       on:select={selectSection}
     />
