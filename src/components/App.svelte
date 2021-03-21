@@ -3,7 +3,7 @@
   import Sections from './Sections.svelte'
   import { getHistoryItems, filterByText, hasBookmarks } from '../lib/history'
   import { getCurrentTabUrl } from '../lib/tabs'
-  import { logErrorAndRethrow } from '../lib/utils'
+  import { logErrorAndRethrow, hide } from '../lib/utils'
   import { sortModes } from '../lib/sort'
 
   export let url
@@ -53,7 +53,7 @@
   <p class="loading">Loading history...</p>
 {:then}
   <div class="header">
-    <img src="{protocol}//{host}/favicon.ico" alt="favicon" class="favicon">
+    <img src="{protocol}//{host}/favicon.ico" alt="favicon" class="favicon" on:error={hide}>
     {#if globalTitle}{globalTitle} - {/if}
     <h1 class="host">{host}</h1>
     <Sections

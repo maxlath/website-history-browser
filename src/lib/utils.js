@@ -17,3 +17,7 @@ export const property = attribute => obj => obj[attribute]
 export const sum = array => array.reduce(add, 0)
 
 export const add = (a, b) => a + b
+
+export const hide = ({ target }) => {
+  target.style.display = 'none'
+}
