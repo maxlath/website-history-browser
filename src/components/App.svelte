@@ -30,6 +30,8 @@
   function showAll () {
     bookmarksOnly = false
     textFilter = null
+    selectedSections = []
+    sectionItems = allHistoryItems
   }
 
   $: {
