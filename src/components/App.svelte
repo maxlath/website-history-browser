@@ -5,12 +5,13 @@
   import { getCurrentTabUrl } from '../lib/tabs'
   import { logErrorAndRethrow, hide } from '../lib/utils'
   import { sortModes } from '../lib/sort'
+  import { periods } from '../lib/date'
 
   export let url
 
   let protocol, host, origin, globalTitle, sections, textFilter
-  let allHistoryItems = [], historyItems = [], sectionItems = [], selectedSections = [], sortMode = 'date', bookmarksOnly = false
-  let initalized = false
+  let allHistoryItems = [], historyItems = [], sectionItems = [], selectedSections = []
+  let initalized = false, sortMode = 'date', bookmarksOnly = false, maxAge = Infinity
 
   const init = async () => {
     const { settings = {} } = await browser.storage.local.get('settings')
@@ -31,6 +32,7 @@
     bookmarksOnly = false
     textFilter = null
     resetSection()
+    maxAge = Infinity
   }
 
   function resetSection () {
@@ -48,6 +50,7 @@
   $: {
     historyItems = filterByText(sectionItems, textFilter)
     if (bookmarksOnly) historyItems = historyItems.filter(hasBookmarks)
+    historyItems = historyItems.filter(item => item.period.thresold <= maxAge)
 
     historyItems = historyItems.sort(sortModes[sortMode].fn)
   }
@@ -98,6 +101,12 @@
         <span class="cross">✕</span>
       </button>
     </div>
+
+    <select name="period" bind:value={maxAge}>
+      {#each periods as period}
+        <option value="{period.thresold}">{period.selector || period.label}</option>
+      {/each}
+    </select>
 
     <input name="bookmarks-only" type="checkbox" bind:checked={bookmarksOnly}>
     <label for="bookmarks-only">bookmarks only</label>
