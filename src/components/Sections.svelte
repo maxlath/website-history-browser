@@ -1,7 +1,8 @@
 <script>
   import { entriesByNumberOfItems } from '../lib/sort'
-  import { add } from '../lib/utils'
+  import { add, bubbleUp } from '../lib/utils'
   import { createEventDispatcher } from 'svelte'
+  import SelectorOption from './SelectorOption.svelte'
 
   export let sections, selectedSections, depth
 
@@ -28,15 +29,11 @@
     {/if}
     <ul class="options">
       {#each Object.entries(sections).sort(entriesByNumberOfItems) as [ sectionName, sectionData ]}
-        <li class="option">
-          <button on:click={() => {
-            console.log('select', { sectionName, sectionData })
-            dispatch('select', { sectionName, sectionData, depth })
-            }}>
-            <span class="name">{sectionName}</span>
-            <span class="count">{sectionData.items.length}</span>
-          </button>
-        </li>
+        <SelectorOption
+          {sectionName}
+          {sectionData}
+          on:select={bubbleUp(dispatch, 'select')}
+        />
       {/each}
     </ul>
   </div>
@@ -47,10 +44,7 @@
     sections={sections[depthSelectedSection].subsections}
     {selectedSections}
     depth={depth + 1}
-    on:select={event => {
-      console.log('pass', event.detail)
-      dispatch('select', event.detail)
-    }}
+    on:select={bubbleUp(dispatch, 'select')}
   />
 {/if}
 
@@ -89,34 +83,6 @@
     background-color: #eee;
     z-index: 1;
     visibility: hidden;
-  }
-  .option{
-    display: flex;
-  }
-  .option button{
-    flex: 1;
-    padding: 0.2em 0.5em;
-    background-color: #222;
-    white-space: nowrap;
-    text-align: left;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-  }
-  .option:not(:last-child) button{
-    margin-bottom: 1px;
-  }
-  .option button:hover{
-    background-color: #333;
-  }
-  .name{
-    color: white;
-    margin-right: 0.5em;
-  }
-  .count{
-    margin-left: auto;
-    color: #777;
   }
   .section-selector:hover .options, .section-selector:focus .options{
     visibility: visible;

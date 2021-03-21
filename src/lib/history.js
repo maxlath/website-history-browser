@@ -53,7 +53,7 @@ const getSections = url => {
 }
 
 const getSectionsTree = items => {
-  const sectionsTree = { subsections: {} }
+  const sectionsTree = { subsections: {}, path: [] }
   for (const item of items) {
     const { sections } = item
     let parentSection = sectionsTree
@@ -61,6 +61,7 @@ const getSectionsTree = items => {
       if (section !== '') {
         parentSection.subsections[section] = parentSection.subsections[section] || { items: [], subsections: {} }
         parentSection.subsections[section].items.push(item)
+        parentSection.subsections[section].path = parentSection.path.concat(section)
         parentSection = parentSection.subsections[section]
       }
     }

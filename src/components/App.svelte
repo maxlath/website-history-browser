@@ -38,6 +38,13 @@
     sectionItems = allHistoryItems
   }
 
+  function selectSection (event) {
+    const { sectionName, sectionData, depth } = event.detail
+    console.log('selected', { sectionName, sectionData, depth })
+    sectionItems = sectionData.items
+    selectedSections = sectionData.path
+  }
+
   $: {
     historyItems = filterByText(sectionItems, textFilter)
     if (bookmarksOnly) historyItems = historyItems.filter(hasBookmarks)
@@ -66,12 +73,7 @@
       {sections}
       {selectedSections}
       depth={0}
-      on:select={event => {
-        const { sectionName, sectionData, depth } = event.detail
-        sectionItems = sectionData.items
-        selectedSections = selectedSections.slice(0, depth)
-        selectedSections[depth] = sectionName
-      }}
+      on:select={selectSection}
     />
   </div>
 

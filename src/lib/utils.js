@@ -21,3 +21,5 @@ export const add = (a, b) => a + b
 export const hide = ({ target }) => {
   target.style.display = 'none'
 }
+
+export const bubbleUp = (dispatch, eventName) => ({ detail }) => dispatch('select', detail)
