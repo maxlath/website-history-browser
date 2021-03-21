@@ -74,7 +74,6 @@
     historyItems = historyItems.sort(sortModes[sortMode].fn)
   }
 
-
   $: {
     if (initalized) {
       const settings = { bookmarksOnly, textFilter, sortMode, maxAge, selectedPath, origin }

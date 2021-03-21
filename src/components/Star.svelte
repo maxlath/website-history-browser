@@ -9,8 +9,6 @@
   }
   let fill = '#ffe900'
   if (timeCapsule) fill = '#0099d4'
-  // if (bookmarksCount) fill = '#ffffff'
-
 </script>
 
 {#if bookmarks || bookmarksCount}
