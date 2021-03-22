@@ -16,4 +16,4 @@ browser.commands.onCommand.addListener(command => {
   else if (command === 'open-website-history-browser-tab') openTab()
 })
 
-browser.browserAction.onClicked.addListener(openPopup)
+browser.browserAction.onClicked.addListener(openTab)
