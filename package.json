@@ -14,7 +14,9 @@
     "prepare-publication": "./scripts/prepare_publication",
     "watch": "rollup -c -w"
   },
-  "dependencies": {},
+  "dependencies": {
+    "lodash.debounce": "^4.0.8"
+  },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.1.0",
     "@rollup/plugin-node-resolve": "^11.2.0",

@@ -6,6 +6,7 @@
   import { logErrorAndRethrow, hide } from '../lib/utils'
   import { sortModes } from '../lib/sort'
   import { periods } from '../lib/date'
+  import { getSettings, lazySaveSettings } from '../lib/settings'
 
   export let url
 
@@ -20,7 +21,7 @@
     url = url || await getCurrentTabUrl()
     ;({ protocol, host, origin } = new URL(url))
 
-    const { settings = {} } = await browser.storage.local.get('settings')
+    const { settings = {} } = await getSettings()
     if (settings.bookmarksOnly != null) bookmarksOnly = settings.bookmarksOnly
     if (settings.sortMode != null) sortMode = settings.sortMode
     if (settings.maxAge != null) maxAge = settings.maxAge
@@ -92,9 +93,7 @@
 
   $: {
     if (initalized) {
-      const settings = { bookmarksOnly, textFilter, sortMode, maxAge, selectedPath, origin }
-      // TODO: debounce
-      browser.storage.local.set({ settings })
+      lazySaveSettings({ bookmarksOnly, textFilter, sortMode, maxAge, selectedPath, origin })
     }
   }
 
