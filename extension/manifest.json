@@ -21,8 +21,7 @@
   },
   "browser_action": {
     "default_icon": "history.svg",
-    "default_title": "Website History Browser",
-    "default_popup": "index.html"
+    "default_title": "Website History Browser"
   },
   "commands": {
     "open-website-history-browser-popup": {
