@@ -129,15 +129,17 @@
   </div>
 
   <div class="controls">
-    <label for="sort">Sort by:</label>
-    <select
-      name="sort"
-      bind:value={sortMode}
-      >
-      {#each Object.entries(sortModes) as [ modeKey, { label } ] }
-        <option value="{modeKey}">{label}</option>
-      {/each}
-    </select>
+    <label>
+      Sort by:
+      <select
+        name="sort"
+        bind:value={sortMode}
+        >
+        {#each Object.entries(sortModes) as [ modeKey, { label } ] }
+          <option value="{modeKey}">{label}</option>
+        {/each}
+      </select>
+    </label>
 
     <div class="input-wrapper">
       <input type="text" placeholder="filter..." bind:value={textFilter}>
@@ -157,8 +159,8 @@
     </select>
 
     {#if bookmarksOnly || bookmarksCount > 0}
-      <input name="bookmarks-only" type="checkbox" bind:checked={bookmarksOnly}>
-      <label for="bookmarks-only">
+      <label class="bookmarks-only-input">
+        <input name="bookmarks-only" type="checkbox" bind:checked={bookmarksOnly}>
         bookmarks only
         <span class="count">({bookmarksCount})</span>
       </label>
@@ -220,6 +222,9 @@
     list-style: none;
     margin: 0;
     padding: 0;
+  }
+  :global(label){
+    cursor: pointer;
   }
   ul, p{
     line-height: 1rem;
@@ -319,7 +324,18 @@
     background-color: #111;
     border-radius: 3px;
   }
+  .bookmarks-only-input{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 0.5em;
+  }
+  input[type="checkbox"]{
+    margin-right: 0.5em;
+  }
   label .count{
+    margin-left: 0.5em;
     color: #777;
   }
   /*Small screens*/
