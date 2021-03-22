@@ -14,7 +14,7 @@ total visits: ${item.visitCount}`
 
 <a href="{item.url}" title="{title}" class="{item.period.className}">
   <div class="info">
-    <span class="bookmarks"><Star bookmarks={item.bookmarks} /></span>
+    <div class="bookmarks"><Star bookmarks={item.bookmarks} /></div>
     <h3 class="title">{item.shortTitle}</h3>
     <p class="url">{item.url.replace(origin, '')}</p>
   </div>
@@ -45,6 +45,11 @@ total visits: ${item.visitCount}`
   }
   .info{
     margin-right: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: true;
   }
   .url{
     color: #555;
@@ -119,12 +124,6 @@ total visits: ${item.visitCount}`
     }
     .title:not(:empty) + .url{
       margin-left: 0.5em;
-    }
-    .info{
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
     }
     .visit-count-wrapper{
       width: 2em;
