@@ -6,11 +6,12 @@ import commonjs from '@rollup/plugin-commonjs'
 import resolve from '@rollup/plugin-node-resolve'
 import css from 'rollup-plugin-css-only'
 import notify from 'rollup-plugin-notify'
+import { terser } from 'rollup-plugin-terser'
 
 const production = !process.env.ROLLUP_WATCH
 
 const build = (entry, dest) => {
-  return {
+  const config = {
     input: entry,
     output: {
       sourcemap: true,
@@ -46,6 +47,14 @@ const build = (entry, dest) => {
       clearScreen: false
     }
   }
+
+  if (production) {
+    config.plugins = config.plugins.concat([
+      terser(),
+    ])
+  }
+
+  return config
 }
 
 export default [
