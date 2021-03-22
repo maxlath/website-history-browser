@@ -14,7 +14,9 @@ total visits: ${item.visitCount}`
 
 <a href="{item.url}" title="{title}" class="{item.period.className}">
   <div class="info">
-    <div class="bookmarks"><Star bookmarks={item.bookmarks} /></div>
+    <div class="bookmarks">
+      {#if item.bookmarks}<Star bookmarks={item.bookmarks} />{/if}
+    </div>
     <h3 class="title">{item.shortTitle}</h3>
     <p class="url">{item.url.replace(origin, '')}</p>
   </div>

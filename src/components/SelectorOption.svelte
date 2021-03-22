@@ -17,7 +17,7 @@
     <div class="bookmarks-count">
       {#if sectionData.bookmarksCount > 0}
         <p>{sectionData.bookmarksCount}</p>
-        <Star bookmarksCount={sectionData.bookmarksCount} />
+        <Star />
       {/if}
     </div>
     <span class="count">{sectionData.items.length}</span>
