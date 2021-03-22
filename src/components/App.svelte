@@ -130,7 +130,7 @@
       {/each}
     </select>
 
-    {#if bookmarksCount > 0}
+    {#if bookmarksOnly || bookmarksCount > 0}
       <input name="bookmarks-only" type="checkbox" bind:checked={bookmarksOnly}>
       <label for="bookmarks-only">
         bookmarks only
