@@ -275,8 +275,12 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
     margin-bottom: 1em;
+  }
+  .controls > *{
+    margin: 0.5em 0;
   }
   select, input[type="text"]{
     margin: 0 0.5em;
@@ -337,11 +341,5 @@
   label .count{
     margin-left: 0.5em;
     color: #777;
-  }
-  /*Small screens*/
-  @media screen and (max-width: 800px) {
-    .shown-rate, .show-all{
-      display: none;
-    }
   }
 </style>
