@@ -2,3 +2,4 @@ node_modules
 extension/bundle.css
 extension/*.js
 *.map
+web-ext-artifacts
