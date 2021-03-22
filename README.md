@@ -1,23 +1,20 @@
 <div align="center">
   <h1>Website History Browser</h1>
-  <img src="https://raw.githubusercontent.com/maxlath/website-history-browser/main/extension/history.svg" alt="logo">
+  <img src="https://raw.githubusercontent.com/maxlath/website-history-browser/main/extension/history.svg" alt="logo" width="50%">
 </div>
 <br>
 
 A WebExtension to browse your history per website, with different kinds of filters not available in the native history browser
 
-Features:
+## Features
 * text search through the history of a single website
-* browse through sub-parts of a website
-* browse through a website's bookmarks only
-* display [Time Capsules](https://addons.mozilla.org/firefox/addon/time-capsule/) as special bookmarks
+<div><a title="text search through the history of a single website" href="https://addons.cdn.mozilla.net/user-media/previews/full/253/253959.png" target="_blank"><img src="https://addons.cdn.mozilla.net/user-media/previews/full/253/253959.png" alt="text search through the history of a single website"></a></div>
 
-## Screenshots
-<div style="display: flex;">
-  <a title="text search through the history of a single website" href="https://addons.cdn.mozilla.net/user-media/previews/full/253/253959.png" target="_blank"><img src="https://addons.cdn.mozilla.net/user-media/previews/full/253/253959.png" alt="text search through the history of a single website"></a>
-  <a title="browse through sub-parts of a website" href="https://addons.cdn.mozilla.net/user-media/previews/full/253/253960.png" target="_blank"><img src="https://addons.cdn.mozilla.net/user-media/previews/full/253/253960.png" alt="browse through sub-parts of a website"></a>
-  <a title="browse through a website&#39;s bookmarks only" href="https://addons.cdn.mozilla.net/user-media/previews/full/253/253961.png" target="_blank"><img src="https://addons.cdn.mozilla.net/user-media/previews/full/253/253961.png" alt="browse through a website&#39;s bookmarks only"></a>
-</div>
+* browse through sub-parts of a website
+<div><a title="browse through sub-parts of a website" href="https://addons.cdn.mozilla.net/user-media/previews/full/253/253960.png" target="_blank"><img src="https://addons.cdn.mozilla.net/user-media/previews/full/253/253960.png" alt="browse through sub-parts of a website"></a></div>
+
+* browse through a website's bookmarks only, and display [Time Capsules](https://addons.mozilla.org/firefox/addon/time-capsule/) as special bookmarks
+<div><a title="browse through a website&#39;s bookmarks only" href="https://addons.cdn.mozilla.net/user-media/previews/full/253/253961.png" target="_blank"><img src="https://addons.cdn.mozilla.net/user-media/previews/full/253/253961.png" alt="browse through a website&#39;s bookmarks only"></a></div>
 
 ## Install
 * [Firefox](https://addons.mozilla.org/firefox/addon/website-history-browser/)
