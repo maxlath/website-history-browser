@@ -15,5 +15,11 @@ npm run watch
 npm run auto-reload-extension
 ```
 
+## Build
+```sh
+# Builds the extension zip file in ./web-ext-artifacts
+npm run build
+```
+
 ## License
 [GPL-3.0](https://www.gnu.org/licenses/gpl-3.0.html)
