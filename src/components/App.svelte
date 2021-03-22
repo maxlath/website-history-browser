@@ -19,10 +19,12 @@
 
     const { settings = {} } = await browser.storage.local.get('settings')
     if (settings.bookmarksOnly != null) bookmarksOnly = settings.bookmarksOnly
-    if (settings.textFilter != null) textFilter = settings.textFilter
     if (settings.sortMode != null) sortMode = settings.sortMode
     if (settings.maxAge != null) maxAge = settings.maxAge
-    if (origin === settings.origin && settings.selectedPath != null) selectedPath = settings.selectedPath
+    if (origin === settings.origin) {
+      if (settings.selectedPath != null) selectedPath = settings.selectedPath
+      if (settings.textFilter != null) textFilter = settings.textFilter
+    }
 
     ;({ historyItems, globalTitle, sections } = await getHistoryItems({ origin }))
     allHistoryItems = historyItems
