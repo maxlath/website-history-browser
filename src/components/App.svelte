@@ -13,6 +13,9 @@
   let allItems = [], sectionItems = [], filteredItems = [], displayedItems = [], selectedPath = [], sections = {}
   let initalized = false, sortMode = 'date', bookmarksOnly = false, maxAge = Infinity, bookmarksCount = 0, displayLimit = 20, windowScrollY = 0, pageBottomEl
 
+  // The infinite scroll expects that we always start from the top
+  window.scrollTo(0, 0)
+
   const init = async () => {
     url = url || await getCurrentTabUrl()
     ;({ protocol, host, origin } = new URL(url))
