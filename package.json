@@ -6,7 +6,7 @@
   "author": "maxlath",
   "scripts": {
     "auto-reload-extension": "web-ext run",
-    "build": "rollup -c && web-ext build --overwrite-dest",
+    "build": "cp README.md extension && rollup -c && web-ext build --overwrite-dest",
     "lint": "npm run lint:src && npm run lint:extension",
     "lint:src": "eslint src",
     "lint:src:fix": "eslint src --fix",
