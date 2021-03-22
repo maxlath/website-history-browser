@@ -12,8 +12,9 @@ export async function getHistoryItems ({ origin }) {
 
   const globalTitle = findGlobalTitle(historyItems)
 
+  const globalTitlePattern = new RegExp(`${globalTitle}$`)
   for (const item of historyItems) {
-    item.shortTitle = getShortTitle(item.title, globalTitle)
+    item.shortTitle = getShortTitle(item.title, globalTitlePattern)
     item.bookmarks = bookmarksPerUrl[item.url]
     item.period = getItemPeriod(item.lastVisitTime)
     item.sections = getSections(item.url)

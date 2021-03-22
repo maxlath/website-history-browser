@@ -24,11 +24,13 @@ export const findGlobalTitle = items => {
   return titleWithRecurrentParts.slice(firstRecurrentPartIndex)
 }
 
-export const getShortTitle = (itemTitle, globalTitle) => {
-  if (!globalTitle) return itemTitle
-  return itemTitle
-  .replace(globalTitle, '')
-  .replace(endSeparators, '')
+export const getShortTitle = (itemTitle, globalTitlePattern) => {
+  if (!globalTitlePattern || itemTitle === '') return itemTitle
+  const shortTitle = itemTitle
+    .replace(endSeparators, '')
+    .replace(globalTitlePattern, '')
+    .replace(endSeparators, '')
+  return shortTitle
 }
 
 const partSeparators = /\s*[-—–|/]{1}\s*/g
