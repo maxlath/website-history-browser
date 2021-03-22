@@ -16,6 +16,11 @@ A WebExtension to browse your history per website, with different kinds of filte
 * browse through a website's bookmarks only, and display [Time Capsules](https://addons.mozilla.org/firefox/addon/time-capsule/) as special bookmarks
 <div><a title="browse through a website&#39;s bookmarks only" href="https://addons.cdn.mozilla.net/user-media/previews/full/253/253961.png" target="_blank"><img src="https://addons.cdn.mozilla.net/user-media/previews/full/253/253961.png" alt="browse through a website&#39;s bookmarks only"></a></div>
 
+## Default shortkeys
+Default shortkeys
+* `Ctrl+Alt+H`: display history browser in a popup
+* `Ctrl+Alt+J`: display history browser in a new tab
+
 ## Install
 * [Firefox](https://addons.mozilla.org/firefox/addon/website-history-browser/)
 
