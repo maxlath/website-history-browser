@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+npm run lint
+
+# expects extension/manifest.json version to have been manually incremented
+version_number=$(jq '.version' -r < extension/manifest.json)
+git add extension/manifest.json
+git commit --message "publish: v${version_number}"
+git tag "$version_number"
+npm run build

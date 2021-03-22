@@ -6,11 +6,12 @@
   "author": "maxlath",
   "scripts": {
     "auto-reload-extension": "web-ext run",
-    "build": "cp README.md extension && rollup -c && web-ext build --overwrite-dest",
+    "build": "cp README.md extension && rollup -c && web-ext build",
     "lint": "npm run lint:src && npm run lint:extension",
     "lint:src": "eslint src",
     "lint:src:fix": "eslint src --fix",
     "lint:extension": "web-ext lint",
+    "prepare-publication": "./scripts/prepare_publication",
     "watch": "rollup -c -w"
   },
   "dependencies": {},
