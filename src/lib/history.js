@@ -36,7 +36,7 @@ const getHistoryItem = async origin => {
   const historyItems = await browser.history.search({
     text: origin,
     startTime: theBeginningOfTimes,
-    maxResults: 10000
+    maxResults: Number.MAX_SAFE_INTEGER
   })
   return historyItems.filter(item => item.url.startsWith(origin))
 }

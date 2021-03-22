@@ -10,8 +10,8 @@
   export let url
 
   let protocol, host, origin, globalTitle, textFilter
-  let allHistoryItems = [], historyItems = [], sectionItems = [], selectedPath = [], sections = {}
-  let initalized = false, sortMode = 'date', bookmarksOnly = false, maxAge = Infinity, bookmarksCount = 0
+  let allItems = [], sectionItems = [], filteredItems = [], displayedItems = [], selectedPath = [], sections = {}
+  let initalized = false, sortMode = 'date', bookmarksOnly = false, maxAge = Infinity, bookmarksCount = 0, displayLimit = 20, windowScrollY = 0, pageBottomEl
 
   const init = async () => {
     url = url || await getCurrentTabUrl()
@@ -26,8 +26,8 @@
       if (settings.textFilter != null) textFilter = settings.textFilter
     }
 
-    ;({ historyItems, globalTitle, sections } = await getHistoryItems({ origin }))
-    allHistoryItems = historyItems
+    ;({ historyItems: allItems, globalTitle, sections } = await getHistoryItems({ origin }))
+    filteredItems = allItems
     initalized = true
   }
 
@@ -42,7 +42,7 @@
 
   function resetSection () {
     selectedPath = []
-    sectionItems = allHistoryItems
+    sectionItems = allItems
   }
 
   function selectSection (event) {
@@ -53,7 +53,7 @@
 
   $: {
     if (selectedPath.length === 0) {
-      sectionItems = allHistoryItems
+      sectionItems = allItems
     } else {
       try {
         sectionItems = getSectionItemsFromPath(sections, selectedPath)
@@ -68,12 +68,23 @@
 
   $: {
     // TODO: optimization: reduce filters to a single loop
-    historyItems = filterByText(sectionItems, textFilter)
-    historyItems = historyItems.filter(item => item.period.thresold <= maxAge)
-    if (bookmarksOnly) historyItems = historyItems.filter(hasBookmarks)
-    else bookmarksCount = historyItems.filter(hasBookmarks).length
+    filteredItems = filterByText(sectionItems, textFilter)
+    filteredItems = filteredItems.filter(item => item.period.thresold <= maxAge)
+    if (bookmarksOnly) {
+      filteredItems = filteredItems.filter(hasBookmarks)
+      bookmarksCount = filteredItems.length
+    } else {
+      bookmarksCount = filteredItems.filter(hasBookmarks).length
+    }
 
-    historyItems = historyItems.sort(sortModes[sortMode].fn)
+    filteredItems = filteredItems.sort(sortModes[sortMode].fn)
+
+    // Reset everytime filters are updated
+    displayLimit = 20
+  }
+
+  $: {
+    displayedItems = filteredItems.slice(0, displayLimit)
   }
 
   $: {
@@ -84,8 +95,18 @@
     }
   }
 
-  $: allItemsShown = historyItems.length === allHistoryItems.length
+  $: allItemsShown = filteredItems.length === allItems.length
+
+  $: {
+    if (pageBottomEl != null) {
+      if (windowScrollY + window.screen.height + 50 > pageBottomEl.offsetTop) {
+        displayLimit += 50
+      }
+    }
+  }
 </script>
+
+<svelte:window bind:scrollY={windowScrollY} />
 
 {#await waitingForInitialData}
   <p class="loading">Loading history...</p>
@@ -140,7 +161,7 @@
       </label>
     {/if}
 
-    <p class="shown-rate" class:all-shown={allItemsShown}>{historyItems.length} / {allHistoryItems.length}</p>
+    <p class="shown-rate" class:all-shown={allItemsShown}>{filteredItems.length} / {allItems.length}</p>
     <button class="show-all"
       on:click={showAll}
       disabled={allItemsShown}
@@ -148,7 +169,7 @@
   </div>
 
   <ul class="history-items">
-    {#each historyItems as item (item.id)}
+    {#each displayedItems as item (item.id)}
       <li >
         <HistoryItem {item} {origin} />
       </li>
@@ -156,6 +177,12 @@
       <p class="empty">nothing found</p>
     {/each}
   </ul>
+
+  {#if displayedItems.length < filteredItems.length}
+    <p class="page-bottom" bind:this={pageBottomEl}>
+      Loading more...
+    </p>
+  {/if}
 
 {:catch error}
   <h1>error</h1>
