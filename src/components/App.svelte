@@ -12,7 +12,7 @@
 
   let protocol, host, origin, globalTitle, textFilter
   let allItems = [], sectionItems = [], filteredItems = [], displayedItems = [], selectedPath = [], sections = {}
-  let initalized = false, sortMode = 'date', bookmarksOnly = false, maxAge = Infinity, bookmarksCount = 0, displayLimit = 20, windowScrollY = 0, pageBottomEl
+  let initalized = false, sortMode = 'date', bookmarksOnly = false, maxAge = Infinity, bookmarksCount = 0, displayLimit = 20, windowScrollY = 0, bottomEl
 
   // The infinite scroll expects that we always start from the top
   window.scrollTo(0, 0)
@@ -100,10 +100,9 @@
   $: allItemsShown = filteredItems.length === allItems.length
 
   $: {
-    if (pageBottomEl != null) {
-      if (windowScrollY + window.screen.height + 50 > pageBottomEl.offsetTop) {
-        displayLimit += 50
-      }
+    if (bottomEl != null) {
+      const screenBottom = windowScrollY + window.screen.height
+      if (screenBottom + 50 > bottomEl.offsetTop) displayLimit += 50
     }
   }
 </script>
@@ -183,9 +182,7 @@
   </ul>
 
   {#if displayedItems.length < filteredItems.length}
-    <p class="page-bottom" bind:this={pageBottomEl}>
-      Loading more...
-    </p>
+    <p class="page-bottom" bind:this={bottomEl}>Loading more...</p>
   {/if}
 
 {:catch error}

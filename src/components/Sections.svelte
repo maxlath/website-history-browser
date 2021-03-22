@@ -6,6 +6,8 @@
 
   export let sections, selectedPath, depth
 
+  let displayLimit = 20, windowScrollY = 0, bottomEl
+
   $: depthSelectedSectionName = selectedPath[depth]
 
   const dispatch = createEventDispatcher()
@@ -13,7 +15,20 @@
   const sectionsTotal = Object.values(sections)
     .map(section => section.items.length)
     .reduce(add, 0)
+
+  const allSections = Object.entries(sections).sort(entriesByNumberOfItems)
+
+  $: displayedSections = allSections.slice(0, displayLimit)
+
+  $: {
+    if (bottomEl != null) {
+      const screenBottom = windowScrollY + window.screen.height
+      if (screenBottom + 50 > bottomEl.offsetTop) displayLimit += 50
+    }
+  }
 </script>
+
+<svelte:window bind:scrollY={windowScrollY} />
 
 {#if sectionsTotal > 0}
   <span class="chevron">&gt;</span>
@@ -30,7 +45,7 @@
       </button>
     {/if}
     <ul class="options">
-      {#each Object.entries(sections).sort(entriesByNumberOfItems) as [ sectionName, sectionData ]}
+      {#each displayedSections as [ sectionName, sectionData ]}
         <SelectorOption
           {sectionName}
           {sectionData}
@@ -38,6 +53,9 @@
         />
       {/each}
     </ul>
+    {#if displayedSections.length < allSections.length}
+      <p class="more" bind:this={bottomEl}>...</p>
+    {/if}
   </div>
 {/if}
 

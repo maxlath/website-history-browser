@@ -5,11 +5,26 @@
   import Star from './Star.svelte'
 
   const dispatch = createEventDispatcher()
+  let displayLimit = 20, windowScrollY = 0, bottomEl
 
   export let sectionName, sectionData
   const sections = sectionData.subsections
   const hasSubsections = Object.keys(sections).length > 0
+
+  const allSuboptions = Object.entries(sections).sort(entriesByNumberOfItems)
+
+  $: displayedSuboptions = allSuboptions.slice(0, displayLimit)
+
+  $: {
+    if (bottomEl != null) {
+      const screenBottom = windowScrollY + window.screen.height
+      if (screenBottom + 50 > bottomEl.offsetTop) displayLimit += 50
+    }
+  }
+
 </script>
+
+<svelte:window bind:scrollY={windowScrollY} />
 
 <li class="option">
   <button on:click={() => dispatch('select', sectionData)}>
@@ -25,7 +40,7 @@
   </button>
   {#if hasSubsections}
     <ul class="suboptions">
-      {#each Object.entries(sections).sort(entriesByNumberOfItems) as [ sectionName, sectionData ]}
+      {#each displayedSuboptions as [ sectionName, sectionData ]}
         <svelte:self
           {sectionName}
           {sectionData}
@@ -33,6 +48,9 @@
         />
       {/each}
     </ul>
+    {#if displayedSuboptions.length < allSuboptions.length}
+      <p class="more" bind:this={bottomEl}>...</p>
+    {/if}
   {/if}
 </li>
 
