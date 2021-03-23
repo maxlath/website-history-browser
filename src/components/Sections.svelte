@@ -7,7 +7,7 @@
 
   export let sections, selectedPath, depth
 
-  let displayLimit = 10, windowScrollY = 0, bottomEl, textFilter, filteredItems = [], displayedSections = []
+  let displayLimit = 20, windowScrollY = 0, bottomEl, textFilter, filteredItems = [], displayedSections = [], sectionHovered = false
 
   $: depthSelectedSectionName = selectedPath[depth]
 
@@ -25,9 +25,9 @@
   }
 
   $: {
-    if (bottomEl != null) {
+    if (bottomEl != null && sectionHovered) {
       const screenBottom = windowScrollY + window.screen.height
-      if (screenBottom + 50 > bottomEl.offsetTop) displayLimit += 50
+      if (screenBottom + 50 > bottomEl.offsetTop) displayLimit += 10
     }
   }
 </script>
@@ -37,7 +37,11 @@
 {#if sectionsTotal > 0}
   <span class="chevron">&gt;</span>
 
-  <div class="section-selector">
+  <div
+    class="section-selector"
+    on:mouseenter={() => sectionHovered = true}
+    on:mouseleave={() => sectionHovered = false}
+    >
     {#if depthSelectedSectionName}
       <button
         class="selected"
@@ -48,21 +52,23 @@
         <span class="name">all</span>
       </button>
     {/if}
-    <div class="dropdown">
-      <input type="text" bind:value={textFilter} placeholder="search through {allSections.length} options...">
-      <ul class="options">
-        {#each displayedSections as [ sectionName, sectionData ]}
-          <SelectorOption
-            {sectionName}
-            {sectionData}
-            on:select={bubbleUp(dispatch, 'select')}
-          />
-        {/each}
-      </ul>
-      {#if displayedSections.length < filteredItems.length}
-        <p class="more" bind:this={bottomEl}>...</p>
-      {/if}
-    </div>
+    {#if sectionHovered}
+      <div class="dropdown">
+        <input type="text" bind:value={textFilter} placeholder="search through {allSections.length} options...">
+        <ul class="options">
+          {#each displayedSections as [ sectionName, sectionData ]}
+            <SelectorOption
+              {sectionName}
+              {sectionData}
+              on:select={bubbleUp(dispatch, 'select')}
+            />
+          {/each}
+        </ul>
+        {#if displayedSections.length < filteredItems.length}
+          <p class="more" bind:this={bottomEl}>...</p>
+        {/if}
+      </div>
+    {/if}
   </div>
 {/if}
 
@@ -103,9 +109,6 @@
   }
   .suggestion:hover{
     opacity: 1;
-  }
-  .section-selector:not(:hover):not(:focus) .dropdown{
-    display: none;
   }
   .dropdown{
     position: absolute;
