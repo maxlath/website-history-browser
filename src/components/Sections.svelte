@@ -53,27 +53,25 @@
         <span class="name">all</span>
       </button>
     {/if}
-    {#if sectionHovered}
-      <div class="dropdown">
-        <SearchBox
-          {textFilter}
-          placeholder='search...'
-          on:change={({ detail }) => textFilter = detail}
-        />
-        <ul class="options">
-          {#each displayedSections as [ sectionName, sectionData ]}
-            <SelectorOption
-              {sectionName}
-              {sectionData}
-              on:select={bubbleUp(dispatch, 'select')}
-            />
-          {/each}
-        </ul>
-        {#if displayedSections.length < filteredItems.length}
-          <p class="more" bind:this={bottomEl}>...</p>
-        {/if}
-      </div>
-    {/if}
+    <div class="dropdown">
+      <SearchBox
+        {textFilter}
+        placeholder='search...'
+        on:change={({ detail }) => textFilter = detail}
+      />
+      <ul class="options">
+        {#each displayedSections as [ sectionName, sectionData ]}
+          <SelectorOption
+            {sectionName}
+            {sectionData}
+            on:select={bubbleUp(dispatch, 'select')}
+          />
+        {/each}
+      </ul>
+      {#if displayedSections.length < filteredItems.length}
+        <p class="more" bind:this={bottomEl}>...</p>
+      {/if}
+    </div>
   </div>
 {/if}
 
@@ -114,6 +112,9 @@
   }
   .suggestion:hover{
     opacity: 1;
+  }
+  button:not(:hover):not(:focus) + .dropdown{
+    display: none;
   }
   .dropdown{
     position: absolute;

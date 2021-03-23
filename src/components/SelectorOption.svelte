@@ -5,11 +5,11 @@
   import Star from './Star.svelte'
 
   const dispatch = createEventDispatcher()
-  let displayLimit = 20, windowScrollY = 0, bottomEl
+  let displayLimit = 20, windowScrollY = 0, bottomEl, optionHovered = false
 
   export let sectionName, sectionData
   const sections = sectionData.subsections
-  const displaySubsections = Object.keys(sections).length > 0 && sectionData.items.length < 100
+  const hasSubsections = Object.keys(sections).length > 0
 
   const allSuboptions = Object.entries(sections).sort(entriesByNumberOfItems)
 
@@ -26,7 +26,11 @@
 
 <svelte:window bind:scrollY={windowScrollY} />
 
-<li class="option">
+<li
+  class="option"
+  on:mouseenter={() => optionHovered = true}
+  on:mouseleave={() => optionHovered = false}
+  >
   <button on:click={() => dispatch('select', sectionData)}>
     <span class="name">{sectionName}</span>
     <div class="bookmarks-count">
@@ -36,9 +40,9 @@
       {/if}
     </div>
     <span class="count">{sectionData.items.length}</span>
-    <span class="chevron">{#if displaySubsections}&gt;{/if}</span>
+    <span class="chevron">{#if hasSubsections}&gt;{/if}</span>
   </button>
-  {#if displaySubsections}
+  <div class="dropdown">
     <ul class="suboptions">
       {#each displayedSuboptions as [ sectionName, sectionData ]}
         <svelte:self
@@ -51,7 +55,7 @@
     {#if displayedSuboptions.length < allSuboptions.length}
       <p class="more" bind:this={bottomEl}>...</p>
     {/if}
-  {/if}
+  </div>
 </li>
 
 <style>
@@ -78,15 +82,14 @@
   .option{
     position: relative;
   }
-  .suboptions{
+  button:not(:hover):not(:focus) + .dropdown{
+    display: none;
+  }
+  .dropdown{
     background-color: #111;
     position: absolute;
     top: 0;
     left: 100%;
-    visibility: hidden;
-  }
-  .option:hover > .suboptions, .option:focus > .suboptions{
-    visibility: visible;
   }
   .bookmarks-count{
     width: 3em;
