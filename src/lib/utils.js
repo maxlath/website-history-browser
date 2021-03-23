@@ -27,6 +27,10 @@ export const bubbleUp = (dispatch, eventName) => ({ detail }) => dispatch('selec
 export const getPathnameSections = pathname => {
   return pathname
   .slice(1)
-  .replace(/\/$/, '')
   .split('/')
+  // Drop last part, be it '' or a file within a folder
+  // Ex:
+  // - /foo/bar => [ 'foo' ]
+  // - /foo/bar/ => [ 'foo', 'bar' ]
+  .slice(0, -1)
 }
