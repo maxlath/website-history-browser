@@ -1,7 +1,8 @@
 <script>
   import HistoryItem from './HistoryItem.svelte'
   import Sections from './Sections.svelte'
-  import { getHistoryItems, filterByText, hasBookmarks, getSectionItemsFromPath } from '../lib/history'
+  import { getHistoryItems, hasBookmarks, getSectionItemsFromPath } from '../lib/history'
+  import { filterHistoryItemsByText } from '../lib/filter'
   import { getCurrentTabUrl } from '../lib/tabs'
   import { logErrorAndRethrow, hide, getPathnameSections } from '../lib/utils'
   import { sortModes } from '../lib/sort'
@@ -70,7 +71,7 @@
 
   $: {
     // TODO: optimization: reduce filters to a single loop
-    filteredItems = filterByText(sectionItems, textFilter)
+    filteredItems = filterHistoryItemsByText(sectionItems, textFilter)
     filteredItems = filteredItems.filter(item => item.period.thresold <= maxAge)
     if (bookmarksOnly) {
       filteredItems = filteredItems.filter(hasBookmarks)

@@ -9,7 +9,7 @@
 
   export let sectionName, sectionData
   const sections = sectionData.subsections
-  const hasSubsections = Object.keys(sections).length > 0
+  const displaySubsections = Object.keys(sections).length > 0 && sectionData.items.length < 100
 
   const allSuboptions = Object.entries(sections).sort(entriesByNumberOfItems)
 
@@ -36,9 +36,9 @@
       {/if}
     </div>
     <span class="count">{sectionData.items.length}</span>
-    <span class="chevron">{#if hasSubsections}&gt;{/if}</span>
+    <span class="chevron">{#if displaySubsections}&gt;{/if}</span>
   </button>
-  {#if hasSubsections}
+  {#if displaySubsections}
     <ul class="suboptions">
       {#each displayedSuboptions as [ sectionName, sectionData ]}
         <svelte:self

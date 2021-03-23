@@ -27,14 +27,6 @@ export async function getHistoryItems ({ origin }) {
   return { historyItems, globalTitle, sections }
 }
 
-export function filterByText (historyItems, text) {
-  if (!text || text === '') return historyItems
-  text = text.toLowerCase()
-  return historyItems.filter(item => {
-    return item.title.toLowerCase().includes(text) || item.url.toLowerCase().includes(text)
-  })
-}
-
 const getHistoryItem = async origin => {
   const historyItems = await browser.history.search({
     text: origin,

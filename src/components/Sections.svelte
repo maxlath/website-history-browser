@@ -1,12 +1,13 @@
 <script>
   import { entriesByNumberOfItems } from '../lib/sort'
+  import { filterSectionsEntriesByText } from '../lib/filter'
   import { add, bubbleUp } from '../lib/utils'
   import { createEventDispatcher } from 'svelte'
   import SelectorOption from './SelectorOption.svelte'
 
   export let sections, selectedPath, depth
 
-  let displayLimit = 20, windowScrollY = 0, bottomEl
+  let displayLimit = 10, windowScrollY = 0, bottomEl, textFilter, filteredItems = [], displayedSections = []
 
   $: depthSelectedSectionName = selectedPath[depth]
 
@@ -18,7 +19,10 @@
 
   const allSections = Object.entries(sections).sort(entriesByNumberOfItems)
 
-  $: displayedSections = allSections.slice(0, displayLimit)
+  $: {
+    filteredItems = filterSectionsEntriesByText(allSections, textFilter)
+    displayedSections = filteredItems.slice(0, displayLimit)
+  }
 
   $: {
     if (bottomEl != null) {
@@ -44,18 +48,21 @@
         <span class="name">all</span>
       </button>
     {/if}
-    <ul class="options">
-      {#each displayedSections as [ sectionName, sectionData ]}
-        <SelectorOption
-          {sectionName}
-          {sectionData}
-          on:select={bubbleUp(dispatch, 'select')}
-        />
-      {/each}
-    </ul>
-    {#if displayedSections.length < allSections.length}
-      <p class="more" bind:this={bottomEl}>...</p>
-    {/if}
+    <div class="dropdown">
+      <input type="text" bind:value={textFilter} placeholder="search through {allSections.length} options...">
+      <ul class="options">
+        {#each displayedSections as [ sectionName, sectionData ]}
+          <SelectorOption
+            {sectionName}
+            {sectionData}
+            on:select={bubbleUp(dispatch, 'select')}
+          />
+        {/each}
+      </ul>
+      {#if displayedSections.length < filteredItems.length}
+        <p class="more" bind:this={bottomEl}>...</p>
+      {/if}
+    </div>
   </div>
 {/if}
 
@@ -74,15 +81,14 @@
     font-size: 2rem;
     margin: 0 0.5rem;
     /* Center vertically */
-    padding-top: 0.1em;
+    padding-top: 0.2em;
   }
   .section-selector{
     min-width: 3em;
-    max-height: 1.2em;
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    margin-bottom: 0.4em;
+    position: relative;
   }
   .selected, .suggestion{
     padding: 0.2rem 0.5rem;
@@ -93,18 +99,31 @@
     font-weight: bold;
   }
   .suggestion{
-    background-color: #111;
     opacity: 0.5;
   }
   .suggestion:hover{
     opacity: 1;
   }
-  .options{
-    background-color: #eee;
-    z-index: 1;
-    visibility: hidden;
+  .section-selector:not(:hover):not(:focus) .dropdown{
+    display: none;
   }
-  .section-selector:hover .options, .section-selector:focus .options{
-    visibility: visible;
+  .dropdown{
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #111;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  input[type="text"]{
+    margin: 0.5em;
+    border-radius: 2px;
+    padding: 0.5em;
+    border: none;
+  }
+  .more{
+    padding-bottom: 0.5em;
   }
 </style>
