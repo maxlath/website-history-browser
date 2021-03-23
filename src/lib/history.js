@@ -1,6 +1,7 @@
 import { getItemPeriod } from './date'
 import { getBookmarksPerUrl } from './bookmarks'
 import { findGlobalTitle, getShortTitle } from './title'
+import { getPathnameSections } from './utils'
 
 const theBeginningOfTimes = new Date(0)
 
@@ -47,11 +48,7 @@ export const hasBookmarks = item => item.bookmarks != null
 
 const getSections = url => {
   const { pathname } = new URL(url)
-  return pathname
-  .slice(1)
-  .replace(/\/$/, '')
-  .split('/')
-  .slice(0, -1)
+  return getPathnameSections(pathname)
 }
 
 const getSectionsTree = items => {

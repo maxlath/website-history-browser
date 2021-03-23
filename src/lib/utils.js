@@ -23,3 +23,10 @@ export const hide = ({ target }) => {
 }
 
 export const bubbleUp = (dispatch, eventName) => ({ detail }) => dispatch('select', detail)
+
+export const getPathnameSections = pathname => {
+  return pathname
+  .slice(1)
+  .replace(/\/$/, '')
+  .split('/')
+}

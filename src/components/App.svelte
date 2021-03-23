@@ -3,14 +3,14 @@
   import Sections from './Sections.svelte'
   import { getHistoryItems, filterByText, hasBookmarks, getSectionItemsFromPath } from '../lib/history'
   import { getCurrentTabUrl } from '../lib/tabs'
-  import { logErrorAndRethrow, hide } from '../lib/utils'
+  import { logErrorAndRethrow, hide, getPathnameSections } from '../lib/utils'
   import { sortModes } from '../lib/sort'
   import { periods } from '../lib/date'
   import { getSettings, lazySaveSettings } from '../lib/settings'
 
   export let url
 
-  let protocol, host, origin, globalTitle, textFilter
+  let protocol, host, origin, pathname, globalTitle, textFilter
   let allItems = [], sectionItems = [], filteredItems = [], displayedItems = [], selectedPath = [], sections = {}
   let initalized = false, sortMode = 'date', bookmarksOnly = false, maxAge = Infinity, bookmarksCount = 0, displayLimit = 20, windowScrollY = 0, bottomEl
 
@@ -19,14 +19,14 @@
 
   const init = async () => {
     url = url || await getCurrentTabUrl()
-    ;({ protocol, host, origin } = new URL(url))
+    ;({ protocol, host, origin, pathname } = new URL(url))
 
     const { settings = {} } = await getSettings()
     if (settings.bookmarksOnly != null) bookmarksOnly = settings.bookmarksOnly
     if (settings.sortMode != null) sortMode = settings.sortMode
     if (settings.maxAge != null) maxAge = settings.maxAge
+    if (pathname !== '/') selectedPath = getPathnameSections(pathname)
     if (origin === settings.origin) {
-      if (settings.selectedPath != null) selectedPath = settings.selectedPath
       if (settings.textFilter != null) textFilter = settings.textFilter
     }
 
@@ -50,9 +50,7 @@
   }
 
   function selectSection (event) {
-    const { items, path } = event.detail
-    sectionItems = items
-    selectedPath = path
+    selectedPath = event.detail.path
   }
 
   $: {
