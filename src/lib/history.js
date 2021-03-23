@@ -15,6 +15,7 @@ export async function getHistoryItems ({ origin }) {
   const globalTitlePattern = new RegExp(`${globalTitle}$`)
   for (const item of historyItems) {
     item.shortTitle = getShortTitle(item.title, globalTitlePattern)
+    item.cleanedUrl = decodeURIComponent(item.url.replace(origin, ''))
     item.bookmarks = bookmarksPerUrl[item.url]
     item.period = getItemPeriod(item.lastVisitTime)
     item.sections = getSections(item.url)
@@ -58,8 +59,9 @@ const getSectionsTree = items => {
   for (const item of items) {
     const { sections } = item
     let parentSection = sectionsTree
-    for (const section of sections) {
+    for (let section of sections) {
       if (section !== '') {
+        section = decodeURIComponent(section)
         if (parentSection.subsections[section] == null) {
           parentSection.subsections[section] = { items: [], subsections: {}, bookmarksCount: 0 }
         }

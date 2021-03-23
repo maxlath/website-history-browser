@@ -173,9 +173,7 @@
 
   <ul class="history-items">
     {#each displayedItems as item (item.id)}
-      <li >
-        <HistoryItem {item} {origin} />
-      </li>
+      <li><HistoryItem {item} /></li>
     {:else}
       <p class="empty">nothing found</p>
     {/each}

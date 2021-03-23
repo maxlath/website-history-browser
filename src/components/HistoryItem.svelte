@@ -1,7 +1,7 @@
 <script>
   import { daysAgo, daysAgoText, localDate } from '../lib/date'
   import Star from './Star.svelte'
-  export let item, origin
+  export let item
 
   const getHighlightClass = visitCount => `highlight-${Math.trunc(Math.log10(visitCount))}`
 
@@ -18,7 +18,7 @@ total visits: ${item.visitCount}`
       {#if item.bookmarks}<Star bookmarks={item.bookmarks} />{/if}
     </div>
     <h3 class="title">{item.shortTitle}</h3>
-    <p class="url">{item.url.replace(origin, '')}</p>
+    <p class="url">{item.cleanedUrl}</p>
   </div>
   <!-- TODO: display bookmark tags once there is a standard API allowing it https://stackoverflow.com/questions/42294207/get-bookmark-tags  -->
   <p class="last-visit-absolute-date">{localDate(item.lastVisitTime)}</p>
