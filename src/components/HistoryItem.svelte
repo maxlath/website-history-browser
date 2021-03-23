@@ -129,6 +129,7 @@ total visits: ${item.visitCount}`
     }
     .visit-count-wrapper{
       width: 2em;
+      margin-left: 0.2em;
       display: flex;
       flex-direction: row;
       justify-content: flex-end;
