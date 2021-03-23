@@ -5,7 +5,7 @@
   import Star from './Star.svelte'
 
   const dispatch = createEventDispatcher()
-  let displayLimit = 20, windowScrollY = 0, bottomEl, optionHovered = false
+  let displayLimit = 20, windowScrollY = 0, bottomEl
 
   export let sectionName, sectionData
   const sections = sectionData.subsections
@@ -21,16 +21,11 @@
       if (screenBottom + 50 > bottomEl.offsetTop) displayLimit += 50
     }
   }
-
 </script>
 
 <svelte:window bind:scrollY={windowScrollY} />
 
-<li
-  class="option"
-  on:mouseenter={() => optionHovered = true}
-  on:mouseleave={() => optionHovered = false}
-  >
+<li class="option">
   <button on:click={() => dispatch('select', sectionData)}>
     <span class="name">{sectionName}</span>
     <div class="bookmarks-count">

@@ -1,5 +1,5 @@
 <script>
-  export let bookmarks = undefined, timeCapsule = undefined
+  export let bookmarks = null, timeCapsule = null
 
   let fill = '#ffe900'
 
