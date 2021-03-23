@@ -6,5 +6,9 @@ npm run lint
 version_number=$(jq '.version' -r < extension/manifest.json)
 git add extension/manifest.json
 git commit --message "publish: v${version_number}"
-git tag "$version_number"
+git tag "v$version_number"
 npm run build
+git push origin main
+git push --tags
+sleep 2
+wget "https://github.com/maxlath/website-history-browser/archive/refs/tags/v${version_number}.zip" --output-document "./github-artifacts/v${version_number}.zip"
