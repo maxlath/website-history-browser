@@ -4,6 +4,7 @@
   import { add, bubbleUp } from '../lib/utils'
   import { createEventDispatcher } from 'svelte'
   import SelectorOption from './SelectorOption.svelte'
+  import SearchBox from './SearchBox.svelte'
 
   export let sections, selectedPath, depth
 
@@ -54,7 +55,11 @@
     {/if}
     {#if sectionHovered}
       <div class="dropdown">
-        <input type="text" bind:value={textFilter} placeholder="search through {allSections.length} options...">
+        <SearchBox
+          {textFilter}
+          placeholder='search...'
+          on:change={({ detail }) => textFilter = detail}
+        />
         <ul class="options">
           {#each displayedSections as [ sectionName, sectionData ]}
             <SelectorOption
@@ -119,12 +124,6 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
-  }
-  input[type="text"]{
-    margin: 0.5em;
-    border-radius: 2px;
-    padding: 0.5em;
-    border: none;
   }
   .more{
     padding-bottom: 0.5em;

@@ -1,6 +1,7 @@
 <script>
   import HistoryItem from './HistoryItem.svelte'
   import Sections from './Sections.svelte'
+  import SearchBox from './SearchBox.svelte'
   import { getHistoryItems, hasBookmarks, getSectionItemsFromPath } from '../lib/history'
   import { filterHistoryItemsByText } from '../lib/filter'
   import { getCurrentTabUrl } from '../lib/tabs'
@@ -138,16 +139,11 @@
       </select>
     </label>
 
-    <div class="input-wrapper">
-      <input type="text" placeholder="filter..." bind:value={textFilter}>
-      <button
-        class="close"
-        on:click={() => textFilter = null}
-        on:keyup={({ key }) => key === 'Enter' ? textFilter = null : null}
-        >
-        <span class="cross">✕</span>
-      </button>
-    </div>
+    <SearchBox
+      {textFilter}
+      placeholder='filter...'
+      on:change={({ detail }) => textFilter = detail}
+    />
 
     <select name="period" bind:value={maxAge}>
       {#each periods as period}
@@ -275,7 +271,7 @@
   .controls > *{
     margin: 0.5em 0;
   }
-  select, input[type="text"]{
+  select{
     margin: 0 0.5em;
   }
   .shown-rate{
@@ -293,28 +289,6 @@
   }
   .show-all:hover{
     background-color: #ccc;
-  }
-  .input-wrapper{
-    position: relative;
-  }
-  .close{
-    position: absolute;
-    top: 0;
-    right: 0.8em;
-    height: 100%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-  }
-  .cross{
-    background-color: inherit;
-    transition: background-color 0.3s ease;
-    border-radius: 3px;
-    padding: 0.2em 0.5em;
-  }
-  .close:hover .cross, .close:focus .cross{
-    background-color: #e2e2e2;
   }
   pre{
     padding: 1em;
