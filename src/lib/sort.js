@@ -18,5 +18,23 @@ export const sortModes = {
 }
 
 export function entriesByNumberOfItems (a, b) {
-  return b[1].items.length - a[1].items.length
+  if (a[1].bookmarksCount > 0 || b[1].bookmarksCount > 0) {
+    // First come entries with bookmarks
+    return b[1].bookmarksCount * 100 - a[1].bookmarksCount * 100
+  } else if (b[1].items.length !== a[1].items.length) {
+    // Then with the highest number of items
+    return b[1].items.length * 10 - a[1].items.length * 10
+  } else {
+    // Then alphabetically
+    const aSectionName = a[0]
+    const bSectionName = b[0]
+    if (isIntegerString(a) && isIntegerString(b)) {
+      return parseInt(bSectionName) - parseInt(aSectionName)
+    } else {
+      return aSectionName > bSectionName ? 1 : -1
+    }
+  }
 }
+
+const numberStringPattern = /^\d+$/
+const isIntegerString = str => numberStringPattern.test(str)
