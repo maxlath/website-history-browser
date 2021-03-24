@@ -1,0 +1,35 @@
+body{
+  overflow-x: hidden;
+  overflow-y: auto;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  background-color: #222;
+  color: white;
+  /* Override Chrome injected stylesheet */
+  font-size: 100%;
+}
+/* Reset */
+button{
+  padding: 0;
+  margin: 0;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background: inherit;
+  transition: background-color 0.3s ease, opacity 0.3s ease;
+}
+button:disabled{
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+ul, li, p{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+label{
+  cursor: pointer;
+}
+select{
+  min-height: 2rem;
+  padding: 0.16em;
+}

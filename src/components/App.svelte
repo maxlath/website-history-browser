@@ -186,35 +186,6 @@
 {/await}
 
 <style>
-  :global(body){
-    overflow-x: hidden;
-    overflow-y: auto;
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    background-color: #222;
-    color: white;
-  }
-  /* Reset */
-  :global(button){
-    padding: 0;
-    margin: 0;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    background: inherit;
-    transition: background-color 0.3s ease, opacity 0.3s ease;
-  }
-  :global(button:disabled){
-    cursor: not-allowed;
-    opacity: 0.8;
-  }
-  :global(ul, li, p){
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-  :global(label){
-    cursor: pointer;
-  }
   ul, p{
     line-height: 1rem;
   }
