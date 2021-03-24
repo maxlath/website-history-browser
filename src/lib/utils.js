@@ -34,3 +34,12 @@ export const getPathnameSections = pathname => {
   // - /foo/bar/ => [ 'foo', 'bar' ]
   .slice(0, -1)
 }
+
+export function resilientDecodeURIComponent (str) {
+  try {
+    return decodeURIComponent(str)
+  } catch (err) {
+    console.warn('catched by resilientDecodeURIComponent', err, str)
+    return str
+  }
+}

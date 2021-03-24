@@ -1,7 +1,7 @@
 import { getItemPeriod } from './date'
 import { getBookmarksPerUrl } from './bookmarks'
 import { findGlobalTitle, getShortTitle } from './title'
-import { getPathnameSections } from './utils'
+import { getPathnameSections, resilientDecodeURIComponent } from './utils'
 
 const theBeginningOfTimes = new Date(0)
 
@@ -16,7 +16,7 @@ export async function getHistoryItems ({ origin }) {
   const globalTitlePattern = new RegExp(`${globalTitle}$`)
   for (const item of historyItems) {
     item.shortTitle = getShortTitle(item.title, globalTitlePattern)
-    item.cleanedUrl = decodeURIComponent(item.url.replace(origin, ''))
+    item.cleanedUrl = resilientDecodeURIComponent(item.url.replace(origin, ''))
     item.bookmarks = bookmarksPerUrl[item.url]
     item.period = getItemPeriod(item.lastVisitTime)
     item.sections = getSections(item.url)
@@ -50,7 +50,7 @@ const getSectionsTree = items => {
     let parentSection = sectionsTree
     for (let section of sections) {
       if (section !== '') {
-        section = decodeURIComponent(section)
+        section = resilientDecodeURIComponent(section)
         if (parentSection.subsections[section] == null) {
           parentSection.subsections[section] = { items: [], subsections: {}, bookmarksCount: 0 }
         }
