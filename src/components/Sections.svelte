@@ -113,7 +113,7 @@
   .suggestion:hover{
     opacity: 1;
   }
-  button:not(:hover):not(:focus) + .dropdown{
+  .section-selector:not(:hover) button:not(:focus) + .dropdown{
     display: none;
   }
   .dropdown{

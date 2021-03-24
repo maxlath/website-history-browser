@@ -77,7 +77,7 @@
   .option{
     position: relative;
   }
-  button:not(:hover):not(:focus) + .dropdown{
+  .option:not(:hover) button:not(:focus) + .dropdown{
     display: none;
   }
   .dropdown{
