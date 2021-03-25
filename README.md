@@ -11,10 +11,10 @@ A WebExtension to browse your history per website, with different kinds of filte
 <div><a title="text search through the history of a single website" href="https://addons.cdn.mozilla.net/user-media/previews/full/253/253959.png" target="_blank"><img src="https://addons.cdn.mozilla.net/user-media/previews/full/253/253959.png" alt="text search through the history of a single website"></a></div>
 
 * browse through sub-parts of a website
-<div><a title="browse through sub-parts of a website" href="https://addons.cdn.mozilla.net/user-media/previews/full/253/253960.png" target="_blank"><img src="https://addons.cdn.mozilla.net/user-media/previews/full/253/253960.png" alt="browse through sub-parts of a website"></a></div>
+<div><a title="browse through sub-parts of a website" href="https://addons.cdn.mozilla.net/user-media/previews/full/253/253961.png" target="_blank"><img src="https://addons.cdn.mozilla.net/user-media/previews/full/253/253961.png" alt="browse through sub-parts of a website"></a></div>
 
 * browse through a website's bookmarks only, and display [Time Capsules](https://addons.mozilla.org/firefox/addon/time-capsule/) as special bookmarks
-<div><a title="browse through a website&#39;s bookmarks only" href="https://addons.cdn.mozilla.net/user-media/previews/full/253/253961.png" target="_blank"><img src="https://addons.cdn.mozilla.net/user-media/previews/full/253/253961.png" alt="browse through a website&#39;s bookmarks only"></a></div>
+<div><a title="browse through a website&#39;s bookmarks only" href="https://addons.cdn.mozilla.net/user-media/previews/full/253/253960.png" target="_blank"><img src="https://addons.cdn.mozilla.net/user-media/previews/full/253/253960.png" alt="browse through a website&#39;s bookmarks only"></a></div>
 
 ## Default shortkeys
 Default shortkeys
