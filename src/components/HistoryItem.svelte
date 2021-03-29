@@ -8,7 +8,7 @@
   const daysAgoCount = daysAgo(item.lastVisitTime)
   const daysAgoLabel = daysAgoCount >= 2 ? `${daysAgoCount} days ago` : item.period.label
   const title = `${item.title}\n${item.url}
-last visit: ${daysAgoText(item.lastVisitTime)}, ${localDate(item.lastVisitTime)}
+last visit: ${daysAgoText(item.lastVisitTime)}, ${localDate(item.lastVisitTime)} (${new Date(item.lastVisitTime).toISOString()})
 total visits: ${item.visitCount}`
 </script>
 
