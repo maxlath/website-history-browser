@@ -107,6 +107,9 @@
     font-size: 1.1rem;
     font-weight: bold;
   }
+  .selected{
+    color: yellow;
+  }
   .suggestion{
     opacity: 0.5;
   }
