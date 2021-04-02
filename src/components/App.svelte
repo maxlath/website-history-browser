@@ -151,13 +151,11 @@
       {/each}
     </select>
 
-    {#if bookmarksOnly || bookmarksCount > 0}
-      <label class="bookmarks-only-input">
-        <input name="bookmarks-only" type="checkbox" bind:checked={bookmarksOnly}>
-        bookmarks only
-        <span class="count">({bookmarksCount})</span>
-      </label>
-    {/if}
+    <label class="bookmarks-only-input" class:no-bookmarks={bookmarksCount === 0}>
+      <input name="bookmarks-only" type="checkbox" bind:checked={bookmarksOnly}>
+      bookmarks only
+      <span class="count">({bookmarksCount})</span>
+    </label>
 
     <p class="shown-rate" class:all-shown={allItemsShown}>{filteredItems.length} / {allItems.length}</p>
     <button class="show-all"
@@ -272,6 +270,9 @@
     align-items: center;
     justify-content: center;
     margin: 0.5em;
+  }
+  .bookmarks-only-input.no-bookmarks{
+    opacity: 0.5;
   }
   input[type="checkbox"]{
     margin-right: 0.5em;
