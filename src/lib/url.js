@@ -1,4 +1,4 @@
-import { property, sum } from './utils'
+import { property, resilientDecodeURIComponent, sum } from './utils'
 import { sortModes } from './sort'
 
 const byLastVisited = sortModes.date.fn
@@ -10,7 +10,7 @@ export function ignoreUrlParts ({ filteredItems, ignoreQueryStrings, ignoreHashe
   for (const item of filteredItems) {
     const { search, hash } = new URL(item.url)
     let cleanedUrl = item.cleanedUrl
-    if (ignoreQueryStrings) cleanedUrl = cleanedUrl.replace(search, '')
+    if (ignoreQueryStrings) cleanedUrl = cleanedUrl.replace(resilientDecodeURIComponent(search), '')
     if (ignoreHashes) cleanedUrl = cleanedUrl.replace(hash, '').replace(/#$/, '')
     itemsByCleanedUrls[cleanedUrl] = itemsByCleanedUrls[cleanedUrl] || []
     itemsByCleanedUrls[cleanedUrl].push(item)
