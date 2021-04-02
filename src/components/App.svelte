@@ -8,13 +8,27 @@
   import { logErrorAndRethrow, hide, getPathnameSections } from '../lib/utils'
   import { sortModes } from '../lib/sort'
   import { periods } from '../lib/date'
+  import { ignoreUrlParts } from '../lib/url'
   import { getSettings, lazySaveSettings } from '../lib/settings'
 
   export let url
 
-  let protocol, host, origin, pathname, globalTitle, textFilter
-  let allItems = [], sectionItems = [], filteredItems = [], displayedItems = [], selectedPath = [], sections = {}
-  let initalized = false, sortMode = 'date', bookmarksOnly = false, maxAge = Infinity, bookmarksCount = 0, displayLimit = 20, windowScrollY = 0, bottomEl
+  let protocol, host, origin, pathname, globalTitle, textFilter, bottomEl
+  let allItems = []
+  let sectionItems = []
+  let filteredItems = []
+  let displayedItems = []
+  let selectedPath = []
+  let sections = {}
+  let initalized = false
+  let sortMode = 'date'
+  let bookmarksOnly = false
+  let ignoreQueryStrings = false
+  let ignoreHashes = false
+  let maxAge = Infinity
+  let bookmarksCount = 0
+  let displayLimit = 20
+  let windowScrollY = 0
 
   // The infinite scroll expects that we always start from the top
   window.scrollTo(0, 0)
@@ -25,6 +39,8 @@
 
     const { settings = {} } = await getSettings()
     if (settings.bookmarksOnly != null) bookmarksOnly = settings.bookmarksOnly
+    if (settings.ignoreQueryStrings != null) ignoreQueryStrings = settings.ignoreQueryStrings
+    if (settings.ignoreHashes != null) ignoreHashes = settings.ignoreHashes
     if (settings.sortMode != null) sortMode = settings.sortMode
     if (settings.maxAge != null) maxAge = settings.maxAge
     if (pathname !== '/') selectedPath = getPathnameSections(pathname)
@@ -41,6 +57,8 @@
 
   function showAll () {
     bookmarksOnly = false
+    ignoreQueryStrings = false
+    ignoreHashes = false
     textFilter = null
     resetSection()
     maxAge = Infinity
@@ -81,6 +99,8 @@
       bookmarksCount = filteredItems.filter(hasBookmarks).length
     }
 
+    filteredItems = ignoreUrlParts({ filteredItems, ignoreQueryStrings, ignoreHashes })
+
     filteredItems = filteredItems.sort(sortModes[sortMode].fn)
 
     // Reset everytime filters are updated
@@ -93,7 +113,16 @@
 
   $: {
     if (initalized) {
-      lazySaveSettings({ bookmarksOnly, textFilter, sortMode, maxAge, selectedPath, origin })
+      lazySaveSettings({
+        bookmarksOnly,
+        ignoreQueryStrings,
+        ignoreHashes,
+        textFilter,
+        sortMode,
+        maxAge,
+        selectedPath,
+        origin,
+      })
     }
   }
 
@@ -151,10 +180,20 @@
       {/each}
     </select>
 
-    <label class="bookmarks-only-input" class:no-bookmarks={bookmarksCount === 0}>
+    <label class="checkbox-input" class:no-bookmarks={bookmarksCount === 0}>
       <input name="bookmarks-only" type="checkbox" bind:checked={bookmarksOnly}>
       bookmarks only
       <span class="count">({bookmarksCount})</span>
+    </label>
+
+    <label class="checkbox-input">
+      <input type="checkbox" bind:checked={ignoreQueryStrings}>
+      ignore query strings
+    </label>
+
+    <label class="checkbox-input">
+      <input type="checkbox" bind:checked={ignoreHashes}>
+      ignore hashes
     </label>
 
     <p class="shown-rate" class:all-shown={allItemsShown}>{filteredItems.length} / {allItems.length}</p>
@@ -264,14 +303,14 @@
     background-color: #111;
     border-radius: 3px;
   }
-  .bookmarks-only-input{
+  .checkbox-input{
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     margin: 0.5em;
   }
-  .bookmarks-only-input.no-bookmarks{
+  .no-bookmarks{
     opacity: 0.5;
   }
   input[type="checkbox"]{
