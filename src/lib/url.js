@@ -21,9 +21,14 @@ export function ignoreUrlParts ({ filteredItems, ignoreQueryStrings, ignoreHashe
 }
 
 const mergeItems = (items, cleanedUrl) => {
-  if (items.length === 1) return items[0]
-  const aggregatedVisitsCount = sum(items.map(property('visitCount')))
-  const mostRecentItem = items.sort(byLastVisited)[0]
+  let aggregatedVisitsCount, mostRecentItem
+  if (items.length === 1) {
+    mostRecentItem = items[0]
+    aggregatedVisitsCount = mostRecentItem.visitCount
+  } else {
+    aggregatedVisitsCount = sum(items.map(property('visitCount')))
+    mostRecentItem = items.sort(byLastVisited)[0]
+  }
   return Object.assign({}, mostRecentItem, {
     id: cleanedUrl,
     visitCount: aggregatedVisitsCount,
