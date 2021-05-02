@@ -9,11 +9,11 @@ export const sortModes = {
   },
   title: {
     label: 'Title (A-Z)',
-    fn: (a, b) => b.title.toLowerCase() > a.title.toLowerCase() ? 1 : -1,
+    fn: (a, b) => b.title.toLowerCase() < a.title.toLowerCase() ? 1 : -1,
   },
   titleReverse: {
     label: 'Title (Z-A)',
-    fn: (a, b) => b.title.toLowerCase() < a.title.toLowerCase() ? 1 : -1,
+    fn: (a, b) => b.title.toLowerCase() > a.title.toLowerCase() ? 1 : -1,
   },
 }
 
