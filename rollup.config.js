@@ -42,16 +42,18 @@ const build = (entry, dest) => {
 
       commonjs(),
       notify(),
+
+      production && terser({
+        ecma: 'es2020',
+        module: true,
+        format: {
+          comments: false,
+        }
+      }),
     ],
     watch: {
       clearScreen: false
     }
-  }
-
-  if (production) {
-    config.plugins = config.plugins.concat([
-      terser(),
-    ])
   }
 
   return config
