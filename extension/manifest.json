@@ -3,7 +3,7 @@
   "description": "a WebExtension to browse your history per website",
   "homepage_url": "https://github.com/maxlath/website-history-browser",
   "manifest_version": 2,
-  "version": "1.1.1",
+  "version": "1.1.2",
   "permissions": [
     "bookmarks",
     "history",
