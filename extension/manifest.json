@@ -36,5 +36,10 @@
       },
       "description": "Open website history browser tab"
     }
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{e8f2d1ef-1a55-4aab-9145-fdca2bdc7afb}"
+    }
   }
 }

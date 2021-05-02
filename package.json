@@ -12,6 +12,7 @@
     "lint:src:fix": "eslint src --fix",
     "lint:extension": "web-ext lint",
     "prepare-publication": "./scripts/prepare_publication",
+    "publish": "web-ext sign -s extension -a web-ext-artifacts",
     "watch": "rollup -c -w"
   },
   "dependencies": {
