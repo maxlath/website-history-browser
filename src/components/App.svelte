@@ -180,7 +180,7 @@
       {/each}
     </select>
 
-    <label class="checkbox-input" class:no-bookmarks={bookmarksCount === 0}>
+    <label class="checkbox-input">
       <input name="bookmarks-only" type="checkbox" bind:checked={bookmarksOnly}>
       bookmarks only
       <span class="count">({bookmarksCount})</span>
@@ -309,9 +309,6 @@
     align-items: center;
     justify-content: center;
     margin: 0.5em;
-  }
-  .no-bookmarks{
-    opacity: 0.5;
   }
   input[type="checkbox"]{
     margin-right: 0.5em;
