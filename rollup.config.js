@@ -6,7 +6,6 @@ import commonjs from '@rollup/plugin-commonjs'
 import resolve from '@rollup/plugin-node-resolve'
 import css from 'rollup-plugin-css-only'
 import notify from 'rollup-plugin-notify'
-import { terser } from 'rollup-plugin-terser'
 
 const production = !process.env.ROLLUP_WATCH
 
@@ -42,14 +41,6 @@ const build = (entry, dest) => {
 
       commonjs(),
       notify(),
-
-      production && terser({
-        ecma: 'es2020',
-        module: true,
-        format: {
-          comments: false,
-        }
-      }),
     ],
     watch: {
       clearScreen: false
