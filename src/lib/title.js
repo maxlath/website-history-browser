@@ -25,6 +25,7 @@ export const findGlobalTitle = items => {
 }
 
 export const getShortTitle = (itemTitle, globalTitlePattern) => {
+  itemTitle = itemTitle || ''
   if (!globalTitlePattern || itemTitle === '') return itemTitle
   const shortTitle = itemTitle
     .replace(endSeparators, '')
