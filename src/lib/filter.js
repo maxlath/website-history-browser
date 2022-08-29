@@ -2,7 +2,7 @@ export function filterHistoryItemsByText (historyItems, text) {
   if (!text || text === '') return historyItems
   text = text.toLowerCase()
   return historyItems.filter(item => {
-    return item.title.toLowerCase().includes(text) || item.url.toLowerCase().includes(text)
+    return item.title?.toLowerCase().includes(text) || item.url?.toLowerCase().includes(text)
   })
 }
 
