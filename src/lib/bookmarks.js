@@ -10,14 +10,26 @@ export const getBookmarksPerUrl = async origin => {
   return bookmarksPerUrl
 }
 
+const timeCapsuleMetadataSeparator = '/ᐒ/'
+
 const getBookmarkTimeCapsule = title => {
-  if (!title.includes('/ᐒ/')) return
-  const timeCapsuleStringData = title.split('/ᐒ/')[1].trim()
-  const match = timeCapsuleStringData.match(timeCapsuleStringDataPattern)
-  if (match) {
-    const [ , periodicity, nextOpenTime ] = match
+  if (!title.includes(timeCapsuleMetadataSeparator)) return
+  const timeCapsuleMetadata = title.split(timeCapsuleMetadataSeparator)[1].trim()
+  const legacyMatch = timeCapsuleMetadata.match(legacyTimeCapsuleStringDataPattern)
+  if (legacyMatch) {
+    const [ , periodicity, nextOpenTime ] = legacyMatch
     return { periodicity, nextOpenTime }
+  } else if (timeCapsuleMetadata.includes('=')) {
+    const parsedMetadata = timeCapsuleMetadata.split(' ').reduce(parseMetadata, {})
+    const { freq: frequency, next: nextVisit } = parsedMetadata
+    return { periodicity: frequency, nextOpenTime: nextVisit }
   }
 }
 
-const timeCapsuleStringDataPattern = /^(\d+[A-Z]) (.*)/
+const legacyTimeCapsuleStringDataPattern = /^(\d+[A-Z]) (.*)/
+
+function parseMetadata (obj, part) {
+  const [ key, value ] = part.split('=')
+  obj[key] = value
+  return obj
+}
