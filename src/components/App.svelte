@@ -226,6 +226,20 @@
   ul, p{
     line-height: 1rem;
   }
+  li{
+    overflow: hidden;
+  }
+  li:first-child{
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+  }
+  li:not(:last-child){
+    border-bottom: 1px solid #222;
+  }
+  li:last-child{
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+  }
   .header{
     padding: 0;
     line-height: 1rem;

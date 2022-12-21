@@ -35,8 +35,6 @@ total visits: ${item.visitCount}`
     justify-content: space-between;
     align-items: center;
     padding: 0.5em;
-    margin: 2px 0;
-    border-radius: 2px;
     text-decoration: none;
     color: #222;
     background-color: #eee;
