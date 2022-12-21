@@ -27,10 +27,6 @@
   <style>
     :root{
       --yellow: #d4d40a;
-      --yellow-opacity: 0.9;
-      --grey: #333333;
-    }
-    @media ( prefers-color-scheme: dark ) {
       --yellow: #d4d40a;
       --yellow-opacity: 1;
       --grey: #cccccc;

@@ -21,7 +21,29 @@
   },
   "browser_action": {
     "default_icon": "history.svg",
-    "default_title": "Website History Browser"
+    "default_title": "Website History Browser",
+    "theme_icons": [
+      {
+        "light": "history-light.svg",
+        "dark": "history.svg",
+        "size": 16
+      },
+      {
+        "light": "history-light.svg",
+        "dark": "history.svg",
+        "size": 32
+      },
+      {
+        "light": "history-light.svg",
+        "dark": "history.svg",
+        "size": 48
+      },
+      {
+        "light": "history-light.svg",
+        "dark": "history.svg",
+        "size": 92
+      }
+    ]
   },
   "commands": {
     "open-website-history-browser-popup": {
