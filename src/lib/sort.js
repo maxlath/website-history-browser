@@ -10,6 +10,8 @@ export const sortModes = {
   title: {
     label: 'Title (A-Z)',
     fn: (a, b) => {
+      a.title ??= ''
+      b.title ??= ''
       if (a.title === '' && b.title === '') return b.url.toLowerCase() < a.url.toLowerCase() ? 1 : -1
       if (a.title === '') return 1
       if (b.title === '') return -1

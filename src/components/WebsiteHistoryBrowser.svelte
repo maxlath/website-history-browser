@@ -1,15 +1,14 @@
 <script>
   import HistoryItem from './HistoryItem.svelte'
   import Sections from './Sections.svelte'
-  import SearchBox from './SearchBox.svelte'
   import { getHistoryItems, hasBookmarks, getSectionItemsFromPath } from '../lib/history'
   import { filterHistoryItemsByText } from '../lib/filter'
   import { getCurrentTabUrl } from '../lib/tabs'
   import { logErrorAndRethrow, hide, getPathnameSections } from '../lib/utils'
   import { sortModes } from '../lib/sort'
-  import { periods } from '../lib/date'
   import { ignoreUrlParts } from '../lib/url'
   import { getSettings, lazySaveSettings } from '../lib/settings'
+  import Controls from './Controls.svelte'
 
   export let url
 
@@ -54,15 +53,6 @@
   }
 
   const waitingForInitialData = init().catch(logErrorAndRethrow)
-
-  function showAll () {
-    bookmarksOnly = false
-    ignoreQueryStrings = false
-    ignoreHashes = false
-    textFilter = null
-    resetSection()
-    maxAge = Infinity
-  }
 
   function resetSection () {
     selectedPath = []
@@ -155,53 +145,20 @@
     />
   </div>
 
-  <div class="controls">
-    <label>
-      Sort by:
-      <select
-        name="sort"
-        bind:value={sortMode}
-        >
-        {#each Object.entries(sortModes) as [ modeKey, { label } ] }
-          <option value="{modeKey}">{label}</option>
-        {/each}
-      </select>
-    </label>
+  <Controls
+    bind:sortMode
+    bind:maxAge
+    bind:bookmarksOnly
+    bind:ignoreQueryStrings
+    bind:ignoreHashes
+    bind:textFilter
+    bind:bookmarksCount
+    bind:allItemsShown
 
-    <SearchBox
-      {textFilter}
-      placeholder='filter...'
-      on:change={({ detail }) => textFilter = detail}
-    />
-
-    <select name="period" bind:value={maxAge}>
-      {#each periods as period}
-        <option value="{period.thresold}">{period.selector || period.label}</option>
-      {/each}
-    </select>
-
-    <label class="checkbox-input">
-      <input name="bookmarks-only" type="checkbox" bind:checked={bookmarksOnly}>
-      bookmarks only
-      <span class="count">({bookmarksCount})</span>
-    </label>
-
-    <label class="checkbox-input">
-      <input type="checkbox" bind:checked={ignoreQueryStrings}>
-      ignore query strings
-    </label>
-
-    <label class="checkbox-input">
-      <input type="checkbox" bind:checked={ignoreHashes}>
-      ignore hashes
-    </label>
-
-    <p class="shown-rate" class:all-shown={allItemsShown}>{filteredItems.length} / {allItems.length}</p>
-    <button class="show-all"
-      on:click={showAll}
-      disabled={allItemsShown}
-      >show all</button>
-  </div>
+    {filteredItems}
+    {allItems}
+    {resetSection}
+  />
 
   <ul class="history-items">
     {#each displayedItems as item (item.id)}
@@ -282,53 +239,9 @@
   .empty{
     font-style: italic;
   }
-  .controls{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    margin-bottom: 1em;
-  }
-  .controls > *{
-    margin: 0.5em 0;
-  }
-  select{
-    margin: 0 0.5em;
-  }
-  .shown-rate{
-    margin-left: auto;
-    color: #bbb;
-  }
-  .shown-rate:not(.all-shown){
-    color: yellow;
-  }
-  .show-all{
-    background-color: #bbb;
-    padding: 0.2em;
-    border-radius: 3px;
-    margin-left: 0.5em;
-  }
-  .show-all:hover{
-    background-color: #ccc;
-  }
   pre{
     padding: 1em;
     background-color: #111;
     border-radius: 3px;
-  }
-  .checkbox-input{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    margin: 0.5em;
-  }
-  input[type="checkbox"]{
-    margin-right: 0.5em;
-  }
-  label .count{
-    margin-left: 0.5em;
-    color: #777;
   }
 </style>
