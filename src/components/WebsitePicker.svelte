@@ -1,5 +1,6 @@
 <script>
   import { searchHistoryItems } from '../lib/history'
+  import { setUrl } from '../lib/url'
   import { onChange, uniq } from '../lib/utils'
 
   export let url
@@ -29,7 +30,7 @@
       const searchItem = searchItems.find(isSelectedHostItem)
       if (searchItem) {
         url = new URL(searchItem.url).origin
-        window.location.href += `?url=${encodeURI(url)}`
+        setUrl(url)
       }
     }
   }
@@ -69,7 +70,7 @@
     align-items: center;
     justify-content: center;
     max-width: 40em;
-    margin: 0 auto;
+    margin: 2em auto;
   }
   label{
     font-size: 1.4rem;

@@ -1,24 +1,45 @@
+<script>
+  import { setUrl } from '../lib/url'
+
+  export let url
+
+  function onClick () {
+    setUrl()
+    url = null
+  }
+</script>
+
 <div class="header">
-  <img src="history.svg" alt="">
-  <h1>Website History Browser</h1>
+  <button on:click={onClick}>
+    <img src="history.svg" alt="logo">
+    <h1>Website History Browser</h1>
+  </button>
 </div>
 
 <style>
-  .header{
+  .header, button{
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    margin: 0.5em;
-    color: #ddd;
+  }
+  .header{
+    margin: 0.5rem;
+  }
+  button{
+    margin: 0;
+    padding: 0;
+    font-size: 1.4rem;
   }
   h1{
+    font-size: 1.4rem;
     line-height: 1rem;
     margin: 0;
+    color: #ddd;
   }
   img{
-    height: 2em;
-    width: 2em;
-    margin: 0 1em;
+    height: 2rem;
+    width: 2rem;
+    margin: 0 1rem;
   }
 </style>

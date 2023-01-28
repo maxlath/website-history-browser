@@ -35,3 +35,12 @@ const mergeItems = (items, cleanedUrl) => {
     cleanedUrl,
   })
 }
+
+export function setUrl (url) {
+  if (url) {
+    window.location.href += `?url=${encodeURI(url)}`
+  } else {
+    const { origin, pathname } = window.location
+    window.location.href = `${origin}${pathname}`
+  }
+}

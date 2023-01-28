@@ -6,7 +6,7 @@
   export let url
 </script>
 
-<Header />
+<Header bind:url />
 
 {#if url}
   <WebsiteHistoryBrowser {url} />
