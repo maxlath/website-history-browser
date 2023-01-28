@@ -1,4 +1,5 @@
 <script>
+  import debounce from 'lodash.debounce'
   import { searchHistoryItems } from '../lib/history'
   import { setUrl } from '../lib/url'
   import { onChange, uniq } from '../lib/utils'
@@ -17,11 +18,13 @@
   async function updateSuggestions () {
     selectedHost = ''
     if (inputValue.length > 0) {
-      searchItems = await searchHistoryItems({ text: inputValue })
+      searchItems = await searchHistoryItems({ text: inputValue, limit: 1000 })
       hosts = uniq(searchItems.map(getHistoryItemHost))
       selectedHost = hosts[0]
     }
   }
+
+  const lazyUpdateSuggestions = debounce(updateSuggestions, 200)
 
   const getHistoryItemHost = ({ url }) => new URL(url).host
 
@@ -39,7 +42,7 @@
     return getHistoryItemHost(item) === selectedHost
   }
 
-  $: onChange(inputValue, updateSuggestions)
+  $: onChange(inputValue, lazyUpdateSuggestions)
 </script>
 
 <div class="website-picker">
