@@ -28,12 +28,20 @@ export async function getHistoryItems ({ origin }) {
 }
 
 const getHistoryItem = async origin => {
-  const historyItems = await browser.history.search({
+  const historyItems = await searchHistoryItems({
     text: origin,
     startTime: theBeginningOfTimes,
-    maxResults: Number.MAX_SAFE_INTEGER
   })
   return historyItems.filter(item => item.url.startsWith(origin))
+}
+
+export async function searchHistoryItems ({ text, limit }) {
+  const historyItems = await browser.history.search({
+    text,
+    startTime: theBeginningOfTimes,
+    maxResults: limit || Number.MAX_SAFE_INTEGER
+  })
+  return historyItems
 }
 
 export const hasBookmarks = item => item.bookmarks != null

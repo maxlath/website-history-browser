@@ -43,3 +43,21 @@ export function resilientDecodeURIComponent (str) {
     return str
   }
 }
+
+// Use to make reactive statements code more explicit:
+// Ex: allows to replace:
+//     $: someVariable != null && doSomething()     // Not possible for variables that could actually == null
+//     $: if (someVariable != null) doSomething()   // Not possible for variables that could actually == null
+//     $: if (someVariable || true) doSomething()
+// with:
+//     $: onChange(someVariable, doSomething)
+//     $: onChange(someVariable, someOtherVariable, doSomething)
+// The syntax is tought to invite wrapping other variables
+// for which we should NOT watch for change in the callback,
+// so that they don't trigger the reactive execution
+export const onChange = (...args) => {
+  const callback = args.slice(-1)[0]
+  callback()
+}
+
+export const uniq = array => Array.from(new Set(array))
