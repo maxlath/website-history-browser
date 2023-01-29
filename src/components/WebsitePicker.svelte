@@ -28,14 +28,18 @@
 
   const getHistoryItemHost = ({ url }) => new URL(url).host
 
+  const getHostOrigin = host => {
+    const searchItem = searchItems.find(isHostItem(host))
+    if (searchItem) {
+      return new URL(searchItem.url).origin
+    }
+  }
+
   async function onKeyDown (e) {
     const { key } = e
     if (key === 'Enter') {
-      const searchItem = searchItems.find(isSelectedHostItem)
-      if (searchItem) {
-        url = new URL(searchItem.url).origin
-        setUrl(url)
-      }
+      const origin = getHostOrigin(selectedHost)
+      if (origin) setUrl(origin)
     } else if (key === 'ArrowDown') {
       const currentIndex = hosts.indexOf(selectedHost)
       const nextIndex = Math.min(currentIndex + 1, hosts.length - 1)
@@ -49,8 +53,8 @@
     }
   }
 
-  const isSelectedHostItem = item => {
-    return getHistoryItemHost(item) === selectedHost
+  const isHostItem = host => item => {
+    return getHistoryItemHost(item) === host
   }
 
   $: onChange(inputValue, lazyUpdateSuggestions)
@@ -72,7 +76,11 @@
 
   <ul>
     {#each hosts as host (host)}
-      <li class:selected={host === selectedHost}>{host}</li>
+      <li class:selected={host === selectedHost}>
+        <a href="/index.html?url={encodeURI(getHostOrigin(host))}">
+          {host}
+        </a>
+      </li>
     {/each}
   </ul>
 </div>
@@ -104,11 +112,17 @@
     overflow: hidden;
   }
   li{
+    display: flex;
+    flex-direction: row;
+  }
+  li a{
+    flex: 1;
     background-color: #eee;
     padding: 0.5em;
     color: #222;
+    text-decoration: none;
   }
-  .selected{
+  .selected a{
     background-color: #22aaee;
   }
 </style>
