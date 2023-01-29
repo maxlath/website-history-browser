@@ -29,12 +29,23 @@
   const getHistoryItemHost = ({ url }) => new URL(url).host
 
   async function onKeyDown (e) {
-    if (e.key === 'Enter') {
+    const { key } = e
+    if (key === 'Enter') {
       const searchItem = searchItems.find(isSelectedHostItem)
       if (searchItem) {
         url = new URL(searchItem.url).origin
         setUrl(url)
       }
+    } else if (key === 'ArrowDown') {
+      const currentIndex = hosts.indexOf(selectedHost)
+      const nextIndex = Math.min(currentIndex + 1, hosts.length - 1)
+      selectedHost = hosts[nextIndex]
+      e.preventDefault()
+    } else if (key === 'ArrowUp') {
+      const currentIndex = hosts.indexOf(selectedHost)
+      const nextIndex = Math.max(currentIndex - 1, 0)
+      selectedHost = hosts[nextIndex]
+      e.preventDefault()
     }
   }
 
@@ -89,6 +100,8 @@
     flex-direction: column;
     align-items: stretch;
     justify-content: center;
+    border-radius: 3px;
+    overflow: hidden;
   }
   li{
     background-color: #eee;
