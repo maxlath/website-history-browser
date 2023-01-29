@@ -2,7 +2,7 @@
   import debounce from 'lodash.debounce'
   import { searchHistoryItems } from '../lib/history'
   import { setUrl } from '../lib/url'
-  import { onChange, uniq } from '../lib/utils'
+  import { isOpenedOutside, onChange, uniq } from '../lib/utils'
 
   export let url
 
@@ -39,7 +39,10 @@
     const { key } = e
     if (key === 'Enter') {
       const origin = getHostOrigin(selectedHost)
-      if (origin) setUrl(origin)
+      if (origin) {
+        setUrl(origin)
+        url = origin
+      }
     } else if (key === 'ArrowDown') {
       const currentIndex = hosts.indexOf(selectedHost)
       const nextIndex = Math.min(currentIndex + 1, hosts.length - 1)
@@ -55,6 +58,14 @@
 
   const isHostItem = host => item => {
     return getHistoryItemHost(item) === host
+  }
+
+  function selectUrl (e, url) {
+    if (!isOpenedOutside(e)) {
+      setUrl(origin)
+      url = url
+      e.preventDefault()
+    }
   }
 
   $: onChange(inputValue, lazyUpdateSuggestions)
@@ -76,8 +87,12 @@
 
   <ul>
     {#each hosts as host (host)}
+      {@const origin = getHostOrigin(host)}
       <li class:selected={host === selectedHost}>
-        <a href="/index.html?url={encodeURI(getHostOrigin(host))}">
+        <a
+          href="/index.html?url={encodeURI(origin)}"
+          on:click={e => selectUrl(e, origin)}
+        >
           {host}
         </a>
       </li>

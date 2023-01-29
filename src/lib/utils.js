@@ -61,3 +61,28 @@ export const onChange = (...args) => {
 }
 
 export const uniq = array => Array.from(new Set(array))
+
+export const isOpenedOutside = e => {
+  if (e == null) return false
+
+  let href
+  if (e.currentTarget != null) ({ href } = e.currentTarget)
+
+  if (e?.ctrlKey == null) {
+    throw new Error('non-event object was passed to isOpenedOutside')
+  }
+
+  if (!href) {
+    throw new Error("can't open anchor outside: href is missing")
+  }
+
+  const openInNewWindow = e.shiftKey
+  // Anchor with a href are opened out of the current window when the ctrlKey is
+  // pressed, or the metaKey (Command) in case its a Mac
+  const openInNewTabByKey = isMac ? e.metaKey : e.ctrlKey
+  // Known case of missing currentTarget: leaflet formatted events
+  const openOutsideByTarget = e.currentTarget?.target === '_blank'
+  return openInNewTabByKey || openInNewWindow || openOutsideByTarget
+}
+
+const isMac = window.navigator?.platform.toUpperCase().indexOf('MAC') >= 0
