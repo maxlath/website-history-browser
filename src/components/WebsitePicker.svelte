@@ -62,7 +62,7 @@
 
   function selectUrl (e, url) {
     if (!isOpenedOutside(e)) {
-      setUrl(origin)
+      setUrl(url)
       url = url
       e.preventDefault()
     }
