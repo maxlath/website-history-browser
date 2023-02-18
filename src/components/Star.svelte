@@ -1,4 +1,6 @@
 <script>
+  import { getNextVisitSummary } from '../lib/time_capsules'
+
   export let bookmarks = null, timeCapsule = null
 
   let fill = '#ffe900'
@@ -6,8 +8,12 @@
   if (bookmarks) {
     const bookmarkWithTimeCapsule = bookmarks.find(bookmark => bookmark.timeCapsule != null)
     if (bookmarkWithTimeCapsule) {
-      ({ timeCapsule } = bookmarkWithTimeCapsule)
-      fill = '#0099d4'
+      ;({ timeCapsule } = bookmarkWithTimeCapsule)
+      if (timeCapsule.periodicity != null) {
+        fill = '#0099d4'
+      } else {
+        fill = '#ffff00'
+      }
     }
   }
 </script>
@@ -20,7 +26,7 @@
     </g>
   </svg>
   {#if timeCapsule}
-    <span class="peridicity">{timeCapsule.periodicity}</span>
+    <span class="peridicity">{timeCapsule.periodicity || getNextVisitSummary(timeCapsule.nextOpenTime)}</span>
   {/if}
 </div>
 
