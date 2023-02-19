@@ -1,15 +1,17 @@
 <script>
   import { daysAgo, daysAgoText, localDate } from '../lib/date'
   import Star from './Star.svelte'
-  export let item
+  import { getVisitsCountStyle } from '../lib/visits_color'
 
-  const getHighlightClass = visitCount => `highlight-${Math.trunc(Math.log10(visitCount))}`
+  export let item
 
   const daysAgoCount = daysAgo(item.lastVisitTime)
   const daysAgoLabel = daysAgoCount >= 2 ? `${daysAgoCount} days ago` : item.period.label
   const title = `${item.title}\n${item.url}
 last visit: ${daysAgoText(item.lastVisitTime)}, ${localDate(item.lastVisitTime)} (${new Date(item.lastVisitTime).toISOString()})
 total visits: ${item.visitCount}`
+
+  const { color, backgroundColor } = getVisitsCountStyle(item.visitCount)
 </script>
 
 <a href="{item.url}" title="{title}" class="{item.period.className}">
@@ -24,7 +26,13 @@ total visits: ${item.visitCount}`
   <p class="last-visit-absolute-date">{localDate(item.lastVisitTime)}</p>
   <p class="last-visit-relative-date">{daysAgoLabel}</p>
   <div class="visit-count-wrapper">
-    <p class="visit-count {getHighlightClass(item.visitCount)}">{item.visitCount}</p>
+    <p
+      class="visit-count"
+      style:background-color={backgroundColor}
+      style:color={color}
+    >
+      {item.visitCount}
+    </p>
   </div>
 </a>
 
@@ -62,14 +70,6 @@ total visits: ${item.visitCount}`
     border-radius: 2px;
     padding: 0 0.2em;
     color: white;
-  }
-  .highlight-0{ background-color: #bbb; }
-  .highlight-1{ background-color: #175365; }
-  .highlight-2{ background-color: #4aa; }
-  .highlight-3{ background-color: yellowgreen; }
-  .highlight-4{
-    background-color: yellow;
-    color: #222;
   }
   h3, p{
     padding: 0;
