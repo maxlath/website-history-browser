@@ -7,7 +7,9 @@ npm run lint
 # expects extension/manifest.json version to have been manually incremented
 version_number=$(jq '.version' -r < extension/manifest.json)
 git add extension/manifest.json
-git commit --message "publish: v${version_number}"
+git commit --message "publish: v${version_number}" || {
+  echo -e "\e[0;41mDid you forget to modify the extension/manifest.json version?\e[0m" && false
+}
 git tag "v$version_number"
 npm run build
 git push origin main
