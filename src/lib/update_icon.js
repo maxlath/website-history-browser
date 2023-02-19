@@ -1,12 +1,15 @@
-import { getVisitsCountStyle } from './visits_color'
+import { getVisitsCountData } from './visits'
+const defaultTitle = 'Website History Browser'
 
 export async function updateIcon ({ tabId, url }) {
   if (isNonSpecialUrl(url)) {
     const visits = await browser.history.getVisits({ url })
     const visitCount = visits.length
-    const { color, backgroundColor } = getVisitsCountStyle(visitCount)
+    const { color, backgroundColor, formattedVisitCount } = getVisitsCountData(visitCount)
+    const visitsTitle = `Visited ${visitCount} time${visitCount > 1 ? 's' : ''}`
     await Promise.all([
-      browser.browserAction.setBadgeText({ tabId, text: visitCount.toString() }),
+      browser.browserAction.setTitle({ tabId, title: `${visitsTitle} - ${defaultTitle}` }),
+      browser.browserAction.setBadgeText({ tabId, text: formattedVisitCount }),
       browser.browserAction.setBadgeTextColor({ tabId, color }),
       browser.browserAction.setBadgeBackgroundColor({ tabId, color: backgroundColor }),
     ])

@@ -1,7 +1,7 @@
 <script>
   import { daysAgo, daysAgoText, localDate } from '../lib/date'
   import Star from './Star.svelte'
-  import { getVisitsCountStyle } from '../lib/visits_color'
+  import { getVisitsCountData } from '../lib/visits'
 
   export let item
 
@@ -11,7 +11,7 @@
 last visit: ${daysAgoText(item.lastVisitTime)}, ${localDate(item.lastVisitTime)} (${new Date(item.lastVisitTime).toISOString()})
 total visits: ${item.visitCount}`
 
-  const { color, backgroundColor } = getVisitsCountStyle(item.visitCount)
+  const { color, backgroundColor } = getVisitsCountData(item.visitCount)
 </script>
 
 <a href="{item.url}" title="{title}" class="{item.period.className}">
