@@ -20,13 +20,18 @@ browser.commands.onCommand.addListener(async command => {
 
 browser.browserAction.onClicked.addListener(openTab)
 
+async function onTabUpdated (tabId, changeInfo, tab) {
+  const { url } = await browser.tabs.get(tabId)
+  await updateIcon({ tabId, url })
+}
+
 // When a tab becomes the active tab, update the icon
 // doc: https://developer.chrome.com/extensions/tabs#event-onActivated
 async function onTabActivated (activeTab) {
   const { tabId } = activeTab
   const { url } = await browser.tabs.get(tabId)
-  await updateIcon({ url })
+  await updateIcon({ tabId, url })
 }
 
-// browser.tabs.onUpdated.addListener(onTabUpdated)
+browser.tabs.onUpdated.addListener(onTabUpdated)
 browser.tabs.onActivated.addListener(onTabActivated)
