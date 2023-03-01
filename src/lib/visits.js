@@ -1,4 +1,7 @@
-export const getHighlightClass = visitCount => Math.trunc(Math.log10(visitCount))
+export const getHighlightClass = visitCount => {
+  const powersOfTen = Math.trunc(Math.log10(visitCount))
+  return Math.max(Math.min(powersOfTen, 4), 0)
+}
 
 const styleByHighlightClass = {
   0: {
@@ -31,11 +34,11 @@ export function getVisitsCountData (visitCount) {
 }
 
 function getFormattedVisitCount (visitCount) {
-  if (visitCount > 10 ** 6) return roundToUnit(visitCount, 10 ** 6, 'm')
-  if (visitCount > 10 ** 3) return roundToUnit(visitCount, 10 ** 3, 'k')
+  if (visitCount > 10 ** 6) return truncToUnit(visitCount, 10 ** 6, 'm')
+  if (visitCount > 10 ** 3) return truncToUnit(visitCount, 10 ** 3, 'k')
   return visitCount.toString()
 }
 
-function roundToUnit (num, unit, unitLetter) {
+function truncToUnit (num, unit, unitLetter) {
   return `${Math.trunc(num / unit)}${unitLetter}`
 }
