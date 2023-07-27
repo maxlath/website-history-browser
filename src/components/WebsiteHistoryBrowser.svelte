@@ -26,8 +26,14 @@
   let ignoreHashes = false
   let maxAge = Infinity
   let bookmarksCount = 0
-  let displayLimit = 20
   let windowScrollY = 0
+
+  const defaultHistoryItemHeight = 33
+  function getBaseDisplayLimit () {
+    return Math.max(20, Math.trunc(1.5 * visualViewport.height / defaultHistoryItemHeight))
+  }
+
+  let displayLimit = getBaseDisplayLimit()
 
   // The infinite scroll expects that we always start from the top
   window.scrollTo(0, 0)
@@ -94,7 +100,7 @@
     filteredItems = filteredItems.sort(sortModes[sortMode].fn)
 
     // Reset everytime filters are updated
-    displayLimit = 20
+    displayLimit = getBaseDisplayLimit()
   }
 
   $: {
@@ -121,7 +127,7 @@
   $: {
     if (bottomEl != null) {
       const screenBottom = windowScrollY + window.screen.height
-      if (screenBottom + 50 > bottomEl.offsetTop) displayLimit += 50
+      if (screenBottom + 50 > bottomEl.offsetTop) displayLimit += getBaseDisplayLimit()
     }
   }
 </script>
