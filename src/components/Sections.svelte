@@ -75,7 +75,7 @@
   </div>
 {/if}
 
-{#if depthSelectedSectionName && sections[depthSelectedSectionName].subsections != null}
+{#if depthSelectedSectionName && sections[depthSelectedSectionName]?.subsections != null}
   <svelte:self
     sections={sections[depthSelectedSectionName].subsections}
     {selectedPath}
