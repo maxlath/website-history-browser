@@ -5,7 +5,7 @@
   "description": "a WebExtension to browse your history per website",
   "author": "maxlath",
   "scripts": {
-    "auto-reload-extension": "web-ext run",
+    "auto-reload-extension": "web-ext run  --firefox-profile=web-ext-tests --keep-profile-changes",
     "build": "cp README.md extension && rollup -c && web-ext build",
     "lint": "npm run lint:src && npm run lint:extension",
     "lint:src": "eslint src",
