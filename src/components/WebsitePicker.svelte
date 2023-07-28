@@ -1,8 +1,10 @@
 <script>
   import debounce from 'lodash.debounce'
   import { searchHistoryItems } from '../lib/history'
-  import { setUrl } from '../lib/url'
+  import { getWebsiteHistoryUrl, setUrl } from '../lib/url'
   import { isOpenedOutside, onChange, uniq } from '../lib/utils'
+  import { getHistory, lastSelectedFirst, resetHistory } from '../lib/history_browser_history'
+  import PreviouslySelectedHost from './PreviouslySelectedHost.svelte'
 
   export let url
 
@@ -26,6 +28,13 @@
 
   const lazyUpdateSuggestions = debounce(updateSuggestions, 200)
 
+  let history, lastSelectedHosts
+
+  const waitingForHistory = getHistory().then(res => {
+    history = res
+    lastSelectedHosts = history.sort(lastSelectedFirst)
+  })
+
   const getHistoryItemHost = ({ url }) => new URL(url).host
 
   const getHostOrigin = host => {
@@ -40,8 +49,8 @@
     if (key === 'Enter') {
       const origin = getHostOrigin(selectedHost)
       if (origin) {
-        setUrl(origin)
         url = origin
+        await setUrl(origin)
       }
     } else if (key === 'ArrowDown') {
       const currentIndex = hosts.indexOf(selectedHost)
@@ -60,12 +69,17 @@
     return getHistoryItemHost(item) === host
   }
 
-  function selectUrl (e, url) {
-    if (!isOpenedOutside(e)) {
-      setUrl(url)
+  async function selectUrl (e, url) {
+    if (e == null || !isOpenedOutside(e)) {
       url = url
-      e.preventDefault()
+      e?.preventDefault()
+      await setUrl(url)
     }
+  }
+
+  async function clearHistory () {
+    lastSelectedHosts = []
+    await resetHistory()
   }
 
   $: onChange(inputValue, lazyUpdateSuggestions)
@@ -90,7 +104,7 @@
       {@const origin = getHostOrigin(host)}
       <li class:selected={host === selectedHost}>
         <a
-          href="/index.html?url={encodeURI(origin)}"
+          href={getWebsiteHistoryUrl(origin)}
           on:click={e => selectUrl(e, origin)}
         >
           {host}
@@ -99,6 +113,23 @@
     {/each}
   </ul>
 </div>
+
+{#await waitingForHistory then}
+  {#if lastSelectedHosts.length > 0}
+    <div class="lists">
+      <div class="list-header">
+        <h3>Previously selected</h3>
+        <button class="clear-history" on:click={clearHistory}>Clear</button>
+      </div>
+
+      <ul class="previously-selected-hosts">
+        {#each lastSelectedHosts.slice(0, 16) as hostEntry}
+          <PreviouslySelectedHost entry={hostEntry} on:select={e => selectUrl(null, e.detail)} />
+        {/each}
+      </ul>
+    </div>
+  {/if}
+{/await}
 
 <style>
   .website-picker{
@@ -124,7 +155,6 @@
     align-items: stretch;
     justify-content: center;
     border-radius: 3px;
-    overflow: hidden;
   }
   li{
     display: flex;
@@ -139,5 +169,38 @@
   }
   .selected a{
     background-color: #22aaee;
+  }
+  .lists{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 80em;
+    margin: 8em auto;
+    background-color: #2a2a2a;
+    border-radius: 3px;
+    padding: 0.5em;
+  }
+  .previously-selected-hosts{
+    display: flex;
+    flex-direction: row;
+    align-items: space-around;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+  .list-header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    align-self: stretch;
+    margin: 0.5em;
+  }
+  h3{
+    margin: 0;
+  }
+  .clear-history{
+    text-decoration: underline;
+    color: white;
   }
 </style>

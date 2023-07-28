@@ -1,5 +1,6 @@
 import { property, resilientDecodeURIComponent, sum } from './utils'
 import { sortModes } from './sort'
+import { addUrlToHistory } from './history_browser_history'
 
 const byLastVisited = sortModes.date.fn
 
@@ -45,11 +46,16 @@ const mergeItems = (items, cleanedUrl) => {
   })
 }
 
-export function setUrl (url) {
+export async function setUrl (url) {
   if (url) {
     window.location.href += `?url=${encodeURI(url)}`
+    await addUrlToHistory(url)
   } else {
     const { origin, pathname } = window.location
     window.location.href = `${origin}${pathname}`
   }
+}
+
+export function getWebsiteHistoryUrl (websiteUrl) {
+  return `/index.html?url=${encodeURI(websiteUrl)}`
 }

@@ -3,8 +3,8 @@
 
   export let url
 
-  function onClick () {
-    setUrl()
+  async function onClick () {
+    await setUrl()
     url = null
   }
 </script>
