@@ -2,17 +2,17 @@
 
 set -eu
 
-npm run lint
-
-# expects extension/manifest.json version to have been manually incremented
+# Expects extension/manifest.json version to have been incremented, by running `npm version <level>`,
+# which would have triggered scripts/postversion
 version_number=$(jq '.version' -r < extension/manifest.json)
-git add extension/manifest.json
-git commit --message "publish: v${version_number}" || {
-  echo -e "\e[0;41mDid you forget to modify the extension/manifest.json version?\e[0m" && false
-}
-git tag "v$version_number"
+
+npm run lint
 npm run build
 git push origin main
 git push --tags
 sleep 2
 wget "https://github.com/maxlath/website-history-browser/archive/refs/tags/v${version_number}.zip" --output-document "./github-artifacts/v${version_number}.zip"
+
+echo "Now you would need to upload ./web-ext-artifacts/website_history_browser-${version_number}.zip
+to https://addons.mozilla.org/fr/developers/addon/website-history-browser/versions/submit/"
+echo "It will also ask you for the source code: you can then upload ./github-artifacts/v${version_number}.zip"

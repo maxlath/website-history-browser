@@ -1,7 +1,7 @@
 {
   "name": "website-history-browser",
   "type": "module",
-  "version": "1.0.0",
+  "version": "1.2.7",
   "description": "a WebExtension to browse your history per website",
   "author": "maxlath",
   "scripts": {
@@ -11,6 +11,7 @@
     "lint:src": "eslint src",
     "lint:src:fix": "eslint src --fix",
     "lint:extension": "web-ext lint",
+    "postversion": "./scripts/postversion",
     "prepare-publication": "./scripts/prepare_publication",
     "publish": "web-ext sign -s extension -a web-ext-artifacts",
     "watch": "rollup -c -w"
