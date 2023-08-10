@@ -86,3 +86,7 @@ export const isOpenedOutside = e => {
 }
 
 const isMac = window.navigator?.platform.toUpperCase().indexOf('MAC') >= 0
+
+export function escapeRegExp (text) {
+  return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&')
+}

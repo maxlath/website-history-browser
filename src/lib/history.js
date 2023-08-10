@@ -1,7 +1,7 @@
 import { getItemPeriod } from './date'
 import { getBookmarksPerUrl } from './bookmarks'
 import { findGlobalTitle, getShortTitle } from './title'
-import { getPathnameSections, resilientDecodeURIComponent } from './utils'
+import { escapeRegExp, getPathnameSections, resilientDecodeURIComponent } from './utils'
 
 const theBeginningOfTimes = new Date(0)
 
@@ -13,7 +13,12 @@ export async function getHistoryItems ({ origin }) {
 
   const globalTitle = findGlobalTitle(historyItems)
 
-  const globalTitlePattern = new RegExp(`${globalTitle}$`)
+  let globalTitlePattern
+  try {
+    globalTitlePattern = new RegExp(`${escapeRegExp(globalTitle)}$`)
+  } catch (err) {
+    console.error('could not get globalTitlePattern', err)
+  }
   for (const item of historyItems) {
     item.shortTitle = getShortTitle(item.title, globalTitlePattern)
     item.cleanedUrl = resilientDecodeURIComponent(item.url.replace(origin, ''))
