@@ -36,7 +36,7 @@
         <h3>Last visited</h3>
       </div>
 
-      <ul>
+      <ul class="wrapped">
         {#each lastVisitedHosts as hostEntry}
           <PreviouslySelectedHost entry={hostEntry} on:select={e => selectUrl(null, e.detail)} />
         {/each}
@@ -71,11 +71,13 @@
   section ul{
     display: flex;
     flex-direction: row;
-    align-items: space-around;
-    justify-content: flex-start;
+    align-items: center;
+    justify-content: space-around;
     flex-wrap: wrap;
-    max-height: 12em;
     overflow-y: auto;
+  }
+  .wrapped{
+    max-height: 10em;
   }
   .list-header{
     display: flex;

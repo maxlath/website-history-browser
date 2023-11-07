@@ -23,7 +23,7 @@
     title="Display {host} history browser"
     on:click={select}
   >
-    <img src="{protocol}//{host}/favicon.ico" alt="favicon" class="favicon" on:error={hide}>
+    <img src="{protocol}//{host}/favicon.ico" alt={host} class="favicon" on:error={hide}>
     <p class="host">{host}</p>
   </a>
 </li>
