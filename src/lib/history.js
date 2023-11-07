@@ -95,3 +95,14 @@ export function getSectionItemsFromPath (sections, path) {
   }
   return selectedSection.items
 }
+
+export async function getLastVisitedHosts () {
+  const historyItems = await browser.history.search({ text: '' })
+  const entriesByHost = {}
+  for (const { url } of historyItems) {
+    const { host, protocol } = new URL(url)
+    entriesByHost[host] = entriesByHost[host] || { host, protocol, recentVisitsCount: 0 }
+    entriesByHost[host].recentVisitsCount++
+  }
+  return Object.values(entriesByHost)
+}
