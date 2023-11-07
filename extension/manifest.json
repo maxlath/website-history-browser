@@ -13,7 +13,8 @@
   "background": {
     "scripts": [
       "background.js"
-    ]
+    ],
+    "persistent": false
   },
   "icons": {
     "16": "history.svg",
