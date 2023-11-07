@@ -1,10 +1,9 @@
 <script>
   import debounce from 'lodash.debounce'
-  import { getLastVisitedHosts, searchHistoryItems } from '../lib/history'
+  import { searchHistoryItems } from '../lib/history'
   import { getWebsiteHistoryUrl, setUrl } from '../lib/url'
   import { isOpenedOutside, onChange, uniq } from '../lib/utils'
-  import { getHistory, lastSelectedFirst, resetHistory } from '../lib/history_browser_history'
-  import PreviouslySelectedHost from './PreviouslySelectedHost.svelte'
+  import WebsitePickerLists from './WebsitePickerLists.svelte'
 
   export let url
 
@@ -27,14 +26,6 @@
   }
 
   const lazyUpdateSuggestions = debounce(updateSuggestions, 200)
-
-  let history, lastSelectedHosts, lastVisitedHosts
-
-  const waitingForHistory = Promise.all([ getLastVisitedHosts(), getHistory() ])
-    .then(res => {
-      ;[ lastVisitedHosts, history ] = res
-      lastSelectedHosts = history.sort(lastSelectedFirst)
-    })
 
   const getHistoryItemHost = ({ url }) => new URL(url).host
 
@@ -78,11 +69,6 @@
     }
   }
 
-  async function clearHistory () {
-    lastSelectedHosts = []
-    await resetHistory()
-  }
-
   $: onChange(inputValue, lazyUpdateSuggestions)
 </script>
 
@@ -115,36 +101,7 @@
   </ul>
 </div>
 
-{#await waitingForHistory then}
-  {#if lastVisitedHosts.length > 0}
-    <section>
-      <div class="list-header">
-        <h3>Last visited</h3>
-      </div>
-
-      <ul>
-        {#each lastVisitedHosts as hostEntry}
-          <PreviouslySelectedHost entry={hostEntry} on:select={e => selectUrl(null, e.detail)} />
-        {/each}
-      </ul>
-    </section>
-  {/if}
-
-  {#if lastSelectedHosts.length > 0}
-    <section>
-      <div class="list-header">
-        <h3>Previously selected</h3>
-        <button class="clear-history" on:click={clearHistory}>Clear</button>
-      </div>
-
-      <ul>
-        {#each lastSelectedHosts as hostEntry}
-          <PreviouslySelectedHost entry={hostEntry} on:select={e => selectUrl(null, e.detail)} />
-        {/each}
-      </ul>
-    </section>
-  {/if}
-{/await}
+<WebsitePickerLists bind:url />
 
 <style>
   .website-picker{
@@ -184,40 +141,5 @@
   }
   .selected a{
     background-color: #22aaee;
-  }
-  section{
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    background-color: #2a2a2a;
-    margin: 1rem auto;
-    border-radius: 3px;
-    padding: 0.5em;
-  }
-  section ul{
-    display: flex;
-    flex-direction: row;
-    align-items: space-around;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    max-height: 12em;
-    overflow-y: auto;
-  }
-  .list-header{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    align-self: stretch;
-    margin: 0.5em;
-  }
-  h3{
-    margin: 0;
-  }
-  .clear-history{
-    text-decoration: underline;
-    color: white;
   }
 </style>
