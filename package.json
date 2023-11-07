@@ -1,7 +1,7 @@
 {
   "name": "website-history-browser",
   "type": "module",
-  "version": "1.3.1",
+  "version": "1.4.0",
   "description": "a WebExtension to browse your history per website",
   "author": "maxlath",
   "scripts": {
