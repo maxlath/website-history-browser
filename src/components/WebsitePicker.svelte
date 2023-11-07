@@ -77,28 +77,30 @@
     Select a website
   </label>
 
-  <input
-    id="search"
-    type="search"
-    placeholder="example.org"
-    bind:value={inputValue}
-    on:keydown={onKeyDown}
-    use:autofocus
-  >
+  <div class="input-box">
+    <input
+      id="search"
+      type="search"
+      placeholder="example.org"
+      bind:value={inputValue}
+      on:keydown={onKeyDown}
+      use:autofocus
+    >
 
-  <ul>
-    {#each hosts as host (host)}
-      {@const origin = getHostOrigin(host)}
-      <li class:selected={host === selectedHost}>
-        <a
-          href={getWebsiteHistoryUrl(origin)}
-          on:click={e => selectUrl(e, origin)}
-        >
-          {host}
-        </a>
-      </li>
-    {/each}
-  </ul>
+    <ul class="suggestions">
+      {#each hosts as host (host)}
+        {@const origin = getHostOrigin(host)}
+        <li class:selected={host === selectedHost}>
+          <a
+            href={getWebsiteHistoryUrl(origin)}
+            on:click={e => selectUrl(e, origin)}
+          >
+            {host}
+          </a>
+        </li>
+      {/each}
+    </ul>
+  </div>
 </div>
 
 <WebsitePickerLists bind:url />
@@ -109,23 +111,26 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    max-width: 40em;
     margin: 2em auto;
   }
   label{
     font-size: 1.4rem;
   }
+  .input-box{
+    margin: 1em auto;
+    position: relative;
+  }
   input{
     align-self: stretch;
     padding: 0.5em;
-    margin: 1em 0;
+    margin: 0;
+    width: min(40em, 95vw);
   }
-  ul{
-    align-self: stretch;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: center;
+  .suggestions{
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
     border-radius: 3px;
   }
   li{

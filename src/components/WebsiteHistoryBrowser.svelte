@@ -139,7 +139,7 @@
 {:then}
   <div class="breadcrumb">
     <button on:click={resetSection} disabled={selectedPath.length === 0}>
-      <img src="{protocol}//{host}/favicon.ico" alt="favicon" class="favicon" on:error={hide}>
+      <img src="{protocol}//{host}/favicon.ico" alt={host} class="favicon" on:error={hide}>
       {#if globalTitle}<span class="global-title">{globalTitle} - </span>{/if}
       <h1 class="host">{host}</h1>
     </button>
