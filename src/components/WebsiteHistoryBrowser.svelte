@@ -24,6 +24,7 @@
   let bookmarksOnly = false
   let ignoreQueryStrings = false
   let ignoreHashes = false
+  let ignoreCase = false
   let maxAge = Infinity
   let bookmarksCount = 0
   let windowScrollY = 0
@@ -46,6 +47,7 @@
     if (settings.bookmarksOnly != null) bookmarksOnly = settings.bookmarksOnly
     if (settings.ignoreQueryStrings != null) ignoreQueryStrings = settings.ignoreQueryStrings
     if (settings.ignoreHashes != null) ignoreHashes = settings.ignoreHashes
+    if (settings.ignoreCase != null) ignoreCase = settings.ignoreCase
     if (settings.sortMode != null) sortMode = settings.sortMode
     if (settings.maxAge != null) maxAge = settings.maxAge
     if (pathname !== '/') selectedPath = getPathnameSections(pathname)
@@ -95,7 +97,7 @@
       bookmarksCount = filteredItems.filter(hasBookmarks).length
     }
 
-    filteredItems = ignoreUrlParts({ filteredItems, ignoreQueryStrings, ignoreHashes })
+    filteredItems = ignoreUrlParts({ filteredItems, ignoreQueryStrings, ignoreHashes, ignoreCase })
 
     filteredItems = filteredItems.sort(sortModes[sortMode].fn)
 
@@ -113,6 +115,7 @@
         bookmarksOnly,
         ignoreQueryStrings,
         ignoreHashes,
+        ignoreCase,
         textFilter,
         sortMode,
         maxAge,
@@ -157,6 +160,7 @@
     bind:bookmarksOnly
     bind:ignoreQueryStrings
     bind:ignoreHashes
+    bind:ignoreCase
     bind:textFilter
     bind:bookmarksCount
     bind:allItemsShown

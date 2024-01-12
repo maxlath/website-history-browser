@@ -4,8 +4,8 @@ import { addUrlToHistory } from './history_browser_history'
 
 const byLastVisited = sortModes.date.fn
 
-export function ignoreUrlParts ({ filteredItems, ignoreQueryStrings, ignoreHashes }) {
-  if (!ignoreQueryStrings && !ignoreHashes) return filteredItems
+export function ignoreUrlParts ({ filteredItems, ignoreQueryStrings, ignoreHashes, ignoreCase }) {
+  if (!ignoreQueryStrings && !ignoreHashes && !ignoreCase) return filteredItems
 
   const itemsByCleanedUrls = {}
   for (const item of filteredItems) {
@@ -20,6 +20,9 @@ export function ignoreUrlParts ({ filteredItems, ignoreQueryStrings, ignoreHashe
       cleanedUrl = cleanedUrl
         .replace(hash, '')
         .replace(/#$/, '')
+    }
+    if (ignoreCase) {
+      cleanedUrl = cleanedUrl.toLowerCase()
     }
     cleanedUrl = cleanedUrl.replace(/\/$/, '')
     itemsByCleanedUrls[cleanedUrl] = itemsByCleanedUrls[cleanedUrl] || []

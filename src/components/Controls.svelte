@@ -8,6 +8,7 @@
   export let bookmarksOnly
   export let ignoreQueryStrings
   export let ignoreHashes
+  export let ignoreCase
   export let textFilter
   export let bookmarksCount
   export let allItemsShown
@@ -20,6 +21,7 @@
     bookmarksOnly = false
     ignoreQueryStrings = false
     ignoreHashes = false
+    ignoreCase = false
     textFilter = null
     resetSection()
     maxAge = Infinity
@@ -65,6 +67,11 @@
   <label class="checkbox-input">
     <input type="checkbox" bind:checked={ignoreHashes}>
     ignore hashes
+  </label>
+
+  <label class="checkbox-input">
+    <input type="checkbox" bind:checked={ignoreCase}>
+    ignore case
   </label>
 
   <p class="shown-rate" class:all-shown={allItemsShown}>{filteredItems.length} / {allItems.length}</p>
