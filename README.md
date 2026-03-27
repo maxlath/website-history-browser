@@ -26,7 +26,7 @@ Default shortkeys
 
 ## Development setup
 ```sh
-git clone https://github.com/maxlath/website-history-browser
+git clone https://codeberg.org/maxlath/website-history-browser
 cd website-history-browser
 npm install
 
