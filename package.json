@@ -38,5 +38,9 @@
   "webExt": {
     "sourceDir": "extension"
   },
-  "license": "GPL-3.0"
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://codeberg.org/maxlath/website-history-browser"
+  }
 }
