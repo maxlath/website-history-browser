@@ -10,9 +10,23 @@ npm run lint
 npm run build
 git push origin main
 git push --tags
-sleep 2
-wget "https://github.com/maxlath/website-history-browser/archive/refs/tags/v${version_number}.zip" --output-document "./github-artifacts/v${version_number}.zip"
+
+archive_name=time-capsule-v${version_number}
+mkdir $archive_name
+cp -r README.md \
+  extension \
+  img \
+  package-lock.json \
+  package.json \
+  rollup.config.js \
+  scripts \
+  src \
+  $archive_name
+
+zip -r v${version_number}.zip $archive_name
+mv v${version_number}.zip ./code_archive/
+mv $archive_name /tmp/$archive_name-$RANDOM
 
 echo "Now you would need to upload ./web-ext-artifacts/website_history_browser-${version_number}.zip
 to https://addons.mozilla.org/fr/developers/addon/website-history-browser/versions/submit/"
-echo "It will also ask you for the source code: you can then upload ./github-artifacts/v${version_number}.zip"
+echo "It will also ask you for the source code: you can then upload ./code_archive/v${version_number}.zip"

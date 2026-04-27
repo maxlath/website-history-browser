@@ -4,3 +4,4 @@ extension/*.js
 *.map
 web-ext-artifacts
 extension/*md
+code_archive
