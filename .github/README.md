@@ -1,1 +1,1 @@
-## ⚠<fe0f> This repository was moved to Codeberg 👉 https://codeberg.org/maxlath/website-history-browser
+## ⚠️ This repository was moved to Codeberg 👉 https://codeberg.org/maxlath/website-history-browser
